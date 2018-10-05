@@ -1,13 +1,30 @@
 <!DOCTYPE html>
 <html>
+<style>
+.ilb {
+display: inline-block;}
+</style>
 	<head>
-		<title> Picross - Zachary Scott </title>
+		<title> Picross - Team 20 - Zachary Scott, David Yates</title>
 		<script type="text/javascript" src="code.js"></script>
 	</head>
 	<body>
 		<center>
 			<!-- Main Table for the game -->
-			<button onauxclick="alert('Rightclicked');"> Right Click me!</button>
+			<!--<button onauxclick="alert('Rightclicked');"> Right Click me!</button> -->
+			<h1> Team 20's Picross Game </h1> <br>
+		</center>
+		<div>
+			<center>
+				<div class="ilb"> Choose a grid size:  </div>
+				<div class="ilb"> 
+					<input type="button" id="submit" value="7 x 7" onclick="makeTables(7)">
+				<div class="ilb">
+					<input type="button" id="submit" value="13 x 13" onclick="makeTables(13)">
+				</div>
+			</center>
+		</div> <br> <br>
+		<div class = "ilb">
 			<table>
 				<thead>
 					<tr>
@@ -38,6 +55,12 @@
 
 				</tbody>
 			</table>
-		</center>
+		</div>
+		<div class = "ilb">
+			<h2> Timer </h2>
+			<h2> Elements </h2>
+			<h2> Turns </h2>
+			<h2> Errors </h2>
+		</div>
 	</body>
 </html>
