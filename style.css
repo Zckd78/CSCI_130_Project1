@@ -1,19 +1,21 @@
 
 
-.block {
-	min-height: :20px;
-	min-width:  20px;
+td.b {
+	min-height: 50px;
+	min-width:  50px;
+	max-height: 50px;
+	max-width: 50px;
 }
 
-.is_empty{
+td.is_empty{
 	border: 2px solid white;
 }
 
 
-.is_selected{
+td.is_selected{
 	border: 2px solid blue;
 }
 
-.is_wrong{
+td.is_wrong{
 	border: 2px solid white;
 }
