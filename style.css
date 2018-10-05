@@ -1,0 +1,19 @@
+
+
+.block {
+	min-height: :20px;
+	min-width:  20px;
+}
+
+.is_empty{
+	border: 2px solid white;
+}
+
+
+.is_selected{
+	border: 2px solid blue;
+}
+
+.is_wrong{
+	border: 2px solid white;
+}
