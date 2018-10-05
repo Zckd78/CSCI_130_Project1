@@ -1,14 +1,26 @@
-function addRow() {         
+
+
+function generateTable(xMax,yMax){
+
+
+	for (var y = 0; y < yMax; y++) {
+		addRow(xMax, y);
+	}
+
+}
+
+// Creates a new row and set
+function addRow(xMax, y) {
     // Access the elements from the DOM
-    let objname = document.getElementById("objname"); // based on the ID !!!
-    let price = document.getElementById("price");
-    let table = document.getElementById("myTableData");
+    let table = document.getElementById("GameTable");
     let rowCount = table.rows.length;
     let row = table.insertRow(rowCount);
 	// creation of the elements
-    row.insertCell(0).innerHTML= '<input type="button" value = "Delete" onClick="deleteRow(this)">';
-    row.insertCell(1).innerHTML= objname.value;
-    row.insertCell(2).innerHTML= price.value;
+    
+    // row.insertCell(0).innerHTML= '<div id="'+id+'"></div>';
+    for (var x = 0; x < xMax; x++) {
+		row.insertCell(x).innerHTML= '<div class="block" id="x'+x+'y'+x+'"></div>';
+	}
 }
 
 
