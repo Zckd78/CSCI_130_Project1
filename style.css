@@ -4,14 +4,28 @@
 	display: inline-block;
 }
 
-div.block {
-	min-height: 50px;
-	min-width:  50px;
-	max-height: 50px;
-	max-width: 50px;
+div.pixel_small {
+	min-height: 30px;
+	min-width:  30px;
+	max-height: 30px;
+	max-width: 30px;
 	border: 1px solid black;
 	text-align: center;
+	font-size: : 10px;
 }
+
+div.pixel_large {
+	min-height: 45px;
+	min-width:  45px;
+	max-height: 45px;
+	max-width: 45px;
+	border: 1px solid black;
+	text-align: center;
+	font-size: 16px;
+}
+
+
+
 
 td.is_empty{
 	border: 2px solid white;
@@ -20,6 +34,7 @@ td.is_empty{
 
 td.is_selected{
 	border: 2px solid blue;
+	background-color: #0035AB;
 }
 
 td.is_wrong{
