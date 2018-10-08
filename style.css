@@ -1,10 +1,25 @@
 
+/*
+	Styling for other elements on the page
+*/
 
 .ilb {
 	display: inline-block;
 }
 
-div.pixel_small {
+
+/* Useful for making items dissappear*/
+.hidden {
+	display: none
+}
+
+
+
+/*
+	Styling section for Pixels
+*/
+
+.pixel_small {
 	min-height: 30px;
 	min-width:  30px;
 	max-height: 30px;
@@ -14,7 +29,7 @@ div.pixel_small {
 	font-size: : 10px;
 }
 
-div.pixel_large {
+.pixel_large {
 	min-height: 45px;
 	min-width:  45px;
 	max-height: 45px;
@@ -25,18 +40,34 @@ div.pixel_large {
 }
 
 
-
-
-td.is_empty{
-	border: 2px solid white;
+/* Pushes the pixels closer together*/
+div.pixel_small {
+	margin: -2px -2px -2px -2px;
+}
+div.pixel_large {
+	margin: -2px -2px -2px -2px;
 }
 
+/*
+	Styles related to updating pixels
+*/
 
-td.is_selected{
-	border: 2px solid blue;
-	background-color: #0035AB;
+.pixel_selected {
+	background-color:darkblue; 
+	color: white;
 }
 
-td.is_wrong{
-	border: 2px solid white;
+.pixel_marked {
+	background-color:grey; 
+	color: white;
+}
+
+.pixel_correct {
+	background-color:lightblue; 
+	color: white;
+}
+
+.pixel_incorrect {
+	background-color:red;
+	color: white; 
 }

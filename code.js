@@ -1,7 +1,50 @@
 
+/* 
+	------------------------------[Initializing]------------------------------
+	This area is for code that needs to run first.
+	Use it for initializing the page
+	------------------------------[Initializing]------------------------------
+*/
+
+
+// Sourced from https://stackoverflow.com/questions/4909167/how-to-add-a-custom-right-click-menu-to-a-webpage#4909312
+// Runs first to disable the context menu with Right clicking
+if (document.addEventListener) { // IE >= 9; other browsers
+    document.addEventListener('contextmenu', function(e) {
+        // alert("You've tried to open context menu"); //here you draw your own menu
+        e.preventDefault();
+    }, false);
+} else { // IE < 9
+    document.attachEvent('oncontextmenu', function() {
+        // alert("You've tried to open context menu");
+        window.event.returnValue = false;
+    });
+}
+
+
+/* 
+	------------------------------[FUNCTIONS]------------------------------
+	This area is functions
+	Use it for initializing the page
+	------------------------------[FUNCTIONS]------------------------------
+*/
+
 // Generates the Table based on the x and y Max args.
+// TODO - Make this function remove the existing table before generating the next one.
 function generateTable(xMax,yMax){
 	
+	/*	
+	// Remove the table elements before adding more
+	let table = document.getElementById("GameTable");
+	let rowIndex = table.rowIndex;
+    for (var i = 0; i < table.rows.length; i++) {
+    	let rowIndex = table.rowIndex;
+
+    	table.deleteRow(rowIndex);
+    }
+    */
+
+    // Loop through yMax, and create new rows
 	for (var y = 0; y < yMax; y++) {
 		// Generates the Table, one row at a time
 		addRow(xMax, y);
@@ -19,16 +62,28 @@ function addRow(xMax, y) {
     // row.insertCell(0).innerHTML= '<div id="'+id+'"></div>';
     for (var x = 0; x < xMax; x++) {
 
-    	let tagID = 'x'+x+'y'+y;
+    	// Position
+    	let coordID = 'x'+x+'y'+y;
     	let coords = x+','+y;
+
+    	// Define the pixel div
+    	let tagStart = '<div';
+    	let tagEvents = ' onclick="pixelLeftClick(this)" onauxclick="pixelRightClick(this)"';
+    	let className = ' class="pixel_large"';
+    	let tagID = ' id="' + coordID + '">';
+    	let contents = coords;
+    	let tagEnd = '</div>';
+
+
     	/* --------------------------------------------------
     	  TODO Continue to update the div tags from HERE!
     	  This space is what places the pixels in a line.
     	 -------------------------------------------------- */ 
     	if(xMax == 7){
-			row.insertCell(x).innerHTML= '<div onclick="testLeftClick(this)" class="pixel_large" id="' + tagID + '">' + coords + '</div>';
+			row.insertCell(x).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
     	} else if (xMax == 13){
-			row.insertCell(x).innerHTML= '<div onclick="testLeftClick(this)" class="pixel_small" id="' + tagID + '">' + coords + '</div>';
+    		let className = 'class="pixel_small"';
+			row.insertCell(x).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
     	}
 	}
 }
@@ -36,19 +91,88 @@ function addRow(xMax, y) {
 /* 	Since the pixels pass themselves as (this), we can use their properties, and access
 	their children through the DOM.
 */
-function testLeftClick(pixel){
+function pixelLeftClick(pixel){
 	// I'm alerting the id, although we have access to more.
-	alert(pixel.id+" was left clicked");
+	// alert(pixel.id+" was left clicked");
+	
+	// Add a class to the pixel
+	pixel.classList.add("pixel_selected");
+
+	// Remove other classes
+	pixel.classList.remove("pixel_marked");
+
+	// Try adding new attribute
+	pixel.xCoord = "Test";
 }
 
-function testRightClick(id){
+
+function pixelRightClick(pixel){
 	// I'm alerting the id, although we have access to more.
-	alert(pixel.id+" was right clicked");
+	// alert(pixel.id+" was right clicked");
+
+	// Add a class to the pixel
+	pixel.classList.add("pixel_marked");
+
+	// Remove other classes
+	pixel.classList.remove("pixel_selected");
+
+	// Get the coordinate object
+	var coords = getCoordsFromID(pixel.id);
+
+	// Alert the coordinates.
+	alert("Coords of this pixel: (" + coords.x + "," + coords.y + ")");
 }
+
+// Derives the coordinates of the pixel from the id given.
+// Returns an object with x and y attrs.
+function getCoordsFromID(id){
+
+	var xVal = "";
+	var yVal = "";
+
+	// Check to make sure we have the correct input
+	if(id[0] == 'x'){
+
+		// Start looking at the first value after x
+		let i = 1;
+		while(i<3){
+			if(id[i] == 'y'){
+				break;
+			}
+			else {
+				xVal += id[i++];
+			}		
+		}
+		
+		// Increment again to skip the "y"
+		i++;
+
+		// Start looking for the y value
+		while(i<id.length){
+			yVal += id[i++];
+		}
+	}
+
+	// Return an object with both x and y values
+	return {
+		"x" : xVal,
+		"y" : yVal 
+	};
+}
+
+
+
+
+
+
+
 
 /*
+
+Code Graveyard - Dig this up later if needed. 
+
 Sourced from https://blackboard.learn.fresnostate.edu/bbcswebdav/pid-2341195-dt-content-rid-49956440_1/courses/CSCI130-02-76194-2187/class_javascript_dom_dynatable.html
-*/
+
 
 function deleteRow(obj) {
     let index = obj.parentNode.parentNode.rowIndex;
@@ -81,3 +205,5 @@ function addTable() {
     }
     myTableDiv.appendChild(table); // add the table that was created in the DOM 
 }
+
+*/
