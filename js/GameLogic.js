@@ -1,3 +1,13 @@
+/* 
+	------------------------------[Variables]------------------------------
+	This area is for initializing variables
+	------------------------------[Variables]------------------------------
+*/
+
+
+
+
+
 
 /* 
 	------------------------------[Initializing]------------------------------
@@ -29,10 +39,10 @@ if (document.addEventListener) { // IE >= 9; other browsers
 	------------------------------[FUNCTIONS]------------------------------
 */
 
-// Generates the Table based on the x and y Max args.
-// TODO - Make this function remove the existing table before generating the next one.
-function generateTable(xMax,yMax){
-	
+// Top level function for starting the game
+function startGame(xMax, yMax){
+
+	// TODO - Remove the table rows if present
 	/*	
 	// Remove the table elements before adding more
 	let table = document.getElementById("GameTable");
@@ -44,8 +54,23 @@ function generateTable(xMax,yMax){
     }
     */
 
+    // Use this space to trigger other actions when the game starts.
+    // Start the game timer
+    // Randomize the correct pixels
+    // Do other stuff before the game starts...
+
+
+    // Pass the args to generateTable
+    generateTable(xMax,yMax);
+}
+
+
+// Generates the Table based on the x and y Max args.
+// TODO - Make this function remove the existing table before generating the next one.
+function generateTable(xMax,yMax){
+	
     // Loop through yMax, and create new rows
-	for (var y = 0; y < yMax; y++) {
+	for (let y = 0; y < yMax; y++) {
 		// Generates the Table, one row at a time
 		addRow(xMax, y);
 	}
@@ -117,7 +142,7 @@ function pixelRightClick(pixel){
 	pixel.classList.remove("pixel_selected");
 
 	// Get the coordinate object
-	var coords = getCoordsFromID(pixel.id);
+	let coords = getCoordsFromID(pixel.id);
 
 	// Alert the coordinates.
 	alert("Coords of this pixel: (" + coords.x + "," + coords.y + ")");
@@ -127,8 +152,8 @@ function pixelRightClick(pixel){
 // Returns an object with x and y attrs.
 function getCoordsFromID(id){
 
-	var xVal = "";
-	var yVal = "";
+	let xVal = "";
+	let yVal = "";
 
 	// Check to make sure we have the correct input
 	if(id[0] == 'x'){
@@ -160,8 +185,13 @@ function getCoordsFromID(id){
 	};
 }
 
-
-
+// Given an element id, will cause the element to disappear from the page.
+function hideElement(id){
+	if(id != ""){
+		let obj = document.getElementById(id);
+		obj.classList.add("hidden");
+	}
+}
 
 
 

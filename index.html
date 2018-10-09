@@ -5,36 +5,41 @@
 </style>
 	<head>
 		<title> Picross - Team 20</title>
-		<script type="text/javascript" src="code.js"></script>
-		<link rel="stylesheet" type="text/css" href="style.css">
+		<script type="text/javascript" src="js/GameLogic.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/PicrossStyle.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 	</head>
-	<body>
-		<center>
-			<!-- Main Table for the game -->
-			<!--<button onauxclick="alert('Rightclicked');"> Right Click me!</button> -->
-			<h1> Team 20's Picross Game </h1> 
-			<h3> written by Zachary Scott & David Yates </h3> <br><br>
+	<body class="backdrop container">
 		<div>
+		<div class=" backdrop_clear col">
 			<center>
-				<div class="ilb"> Choose a grid size:  </div>
-				<div class="ilb"> 
-					<input type="button" id="submit" value="7 x 7" onclick="generateTable(7,7)">
-				<div class="ilb">
-					<input type="button" id="submit" value="13 x 13" onclick="generateTable(13,13)">
+				<div>
+					<h1> Team 20's Picross Game </h1> 
+					<h3> written by David Yates & Zachary Scott </h3> <br><br>	
+					<div>
+						<center>
+							<div class="ilb"> Choose a grid size:  </div>
+							<div class="ilb"> 
+								<input type="button" id="submit" value="7 x 7" onclick="startGame(7,7)">
+							<div class="ilb">
+								<input type="button" id="submit" value="13 x 13" onclick="startGame(13,13)">
+							</div>
+						</center>
+					</div> <br> <br>
+					<div class = "ilb">
+						<!-- The game table, propogated by javascript -->
+						<table id="GameTable">
+						</table>
+					</div>
+					<div class = "ilb">
+						<!-- Adding spans with ids to tap into for updating during the game -->
+						<h3> Timer: <span id="val_timer">  </span></h3>
+						<h3> Elements: <span id="val_elements">  </span></h3>
+						<h3> Turns: <span id="val_turns">  </span></h3>
+						<h3> Errors: <span id="val_errors">  </span></h3>
+					</div>
 				</div>
 			</center>
-		</div> <br> <br>
-		<div class = "ilb">
-			<table id="GameTable">
-				
-			</table>
 		</div>
-		<div class = "ilb">
-			<h2> Timer </h2>
-			<h2> Elements </h2>
-			<h2> Turns </h2>
-			<h2> Errors </h2>
-		</div>
-		</center>
 	</body>
 </html>

@@ -8,6 +8,22 @@
 }
 
 
+/*
+	Sourced from http://www.colorzilla.com/gradient-editor/
+	Creates a gradient background
+*/
+.backdrop {
+	background: rgb(181,189,200);
+	background: -moz-linear-gradient(left, rgba(181,189,200,1) 0%, rgba(40,52,59,1) 50%, rgba(130,140,149,1) 100%);
+	background: -webkit-linear-gradient(left, rgba(181,189,200,1) 0%,rgba(40,52,59,1) 50%,rgba(130,140,149,1) 100%);
+	background: linear-gradient(to right, rgba(181,189,200,1) 0%,rgba(40,52,59,1) 50%,rgba(130,140,149,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5bdc8', endColorstr='#828c95',GradientType=1 );
+}
+
+.backdrop_clear {
+	background: white;
+}
+
 /* Useful for making items dissappear*/
 .hidden {
 	display: none
@@ -27,6 +43,8 @@
 	border: 1px solid black;
 	text-align: center;
 	font-size: : 10px;
+	/* Move the pixels closer together*/
+	margin: -2px -2px -2px -2px;
 }
 
 .pixel_large {
@@ -37,28 +55,22 @@
 	border: 1px solid black;
 	text-align: center;
 	font-size: 16px;
-}
-
-
-/* Pushes the pixels closer together*/
-div.pixel_small {
+	/* Move the pixels closer together*/
 	margin: -2px -2px -2px -2px;
 }
-div.pixel_large {
-	margin: -2px -2px -2px -2px;
-}
+
 
 /*
 	Styles related to updating pixels
 */
 
 .pixel_selected {
-	background-color:darkblue; 
+	background-color:#273279; 
 	color: white;
 }
 
 .pixel_marked {
-	background-color:grey; 
+	background-color:#5D337F; 
 	color: white;
 }
 
