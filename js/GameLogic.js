@@ -42,23 +42,25 @@ if (document.addEventListener) { // IE >= 9; other browsers
 // Top level function for starting the game
 function startGame(xMax, yMax){
 
-	// TODO - Remove the table rows if present
-	/*	
 	// Remove the table elements before adding more
 	let table = document.getElementById("GameTable");
-	let rowIndex = table.rowIndex;
-    for (var i = 0; i < table.rows.length; i++) {
-    	let rowIndex = table.rowIndex;
-
-    	table.deleteRow(rowIndex);
-    }
-    */
+	var rowCount = table.rows.length;
+	for (var i = 0; i < rowCount; i++) {
+		// Calling deleteRow(-1) deletes the last row
+		// so we just call this rowCount times
+    	table.deleteRow(-1);
+	}
+	
+    
 
     // Use this space to trigger other actions when the game starts.
     // Start the game timer
     // Randomize the correct pixels
     // Do other stuff before the game starts...
 
+    // Reveal the status bar on the side
+    var statusBar = document.getElementById("GameStatus");
+    statusBar.classList.remove("hidden");
 
     // Pass the args to generateTable
     generateTable(xMax,yMax);
@@ -85,6 +87,7 @@ function addRow(xMax, y) {
 	// creation of the elements
     
     // row.insertCell(0).innerHTML= '<div id="'+id+'"></div>';
+    // This create each pixel cell in the row
     for (var x = 0; x < xMax; x++) {
 
     	// Position
@@ -96,12 +99,13 @@ function addRow(xMax, y) {
     	let tagEvents = ' onclick="pixelLeftClick(this)" onauxclick="pixelRightClick(this)"';
     	let className = ' class="pixel_large"';
     	let tagID = ' id="' + coordID + '">';
-    	let contents = coords;
+    	let contents = "";
     	let tagEnd = '</div>';
 
 
     	/* --------------------------------------------------
-    	  TODO Continue to update the div tags from HERE!
+    	  !!ATTENTION!! 
+    	  Continue to update the div tags from HERE!
     	  This space is what places the pixels in a line.
     	 -------------------------------------------------- */ 
     	if(xMax == 7){
@@ -145,7 +149,7 @@ function pixelRightClick(pixel){
 	let coords = getCoordsFromID(pixel.id);
 
 	// Alert the coordinates.
-	alert("Coords of this pixel: (" + coords.x + "," + coords.y + ")");
+	// alert("Coords of this pixel: (" + coords.x + "," + coords.y + ")");
 }
 
 // Derives the coordinates of the pixel from the id given.
@@ -192,8 +196,6 @@ function hideElement(id){
 		obj.classList.add("hidden");
 	}
 }
-
-
 
 
 

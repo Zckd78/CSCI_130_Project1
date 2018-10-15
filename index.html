@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <style>
 
 </style>
@@ -8,38 +8,49 @@
 		<script type="text/javascript" src="js/GameLogic.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/PicrossStyle.css">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet"> 
 	</head>
-	<body class="backdrop container">
-		<div>
-		<div class=" backdrop_clear col">
-			<center>
-				<div>
+	<body class="bgc_background container-fluid">
+		
+		<div class="row align-items-center">
+			<div class="col-lg-2"> </div>
+			<div id="MainDiv" class=" bgc_foreground fgc_lightblue rounded col-lg-8">			
+				<center>
 					<h1> Team 20's Picross Game </h1> 
 					<h3> written by David Yates & Zachary Scott </h3> <br><br>	
-					<div>
-						<center>
-							<div class="ilb"> Choose a grid size:  </div>
-							<div class="ilb"> 
-								<input type="button" id="submit" value="7 x 7" onclick="startGame(7,7)">
-							<div class="ilb">
-								<input type="button" id="submit" value="13 x 13" onclick="startGame(13,13)">
+				</center>
+				<div>
+					<center>
+						<div class="ilb"> Choose a grid size:  </div>
+						<div class="ilb"> 
+							<input type="button" id="submit" value="7 x 7" onclick="startGame(7,7)"> 
+						</div>
+						<div class="ilb">
+							<input type="button" id="submit" value="13 x 13" onclick="startGame(13,13)">
+						</div>
+					</center>
+				</div> <br> <br>
+				<div class="container">
+					<div class="row"  style="margin-bottom: 100px;">
+						<div class="col-4"> </div>
+						<div id="GameDiv" class="col-6"> 
+							<!-- The game table, propogated by javascript -->
+							<table id="GameTable" class="bgc_white"></table>
+						</div>
+						<div class="col-2">
+						<div id="GameStatus" class="hidden">
+								<!-- Adding spans with ids to tap into for updating during the game -->
+								<h3> Timer: <span id="val_timer" class="StatusText">0</span></h3>
+								<h3> Elements: <span id="val_elements" class="StatusText"> 0 </span></h3>
+								<h3> Turns: <span id="val_turns" class="StatusText">0</span></h3>
+								<h3> Errors: <span id="val_errors" class="StatusText"> 0 </span></h3>
 							</div>
-						</center>
-					</div> <br> <br>
-					<div class = "ilb">
-						<!-- The game table, propogated by javascript -->
-						<table id="GameTable">
-						</table>
-					</div>
-					<div class = "ilb">
-						<!-- Adding spans with ids to tap into for updating during the game -->
-						<h3> Timer: <span id="val_timer">  </span></h3>
-						<h3> Elements: <span id="val_elements">  </span></h3>
-						<h3> Turns: <span id="val_turns">  </span></h3>
-						<h3> Errors: <span id="val_errors">  </span></h3>
+						</div>
 					</div>
 				</div>
-			</center>
-		</div>
+			</div> <!-- End of MainDiv --> 
+			<div class="col-lg-2"> </div>
+		</div> <!-- End of row div -->
 	</body>
 </html>

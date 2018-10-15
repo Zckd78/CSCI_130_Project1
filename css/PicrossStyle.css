@@ -1,7 +1,24 @@
 
 /*
+	Body Styling - This is applied to all elements on the page
+*/
+body * {
+	/* Sourced from https://fonts.google.com/ */
+	font-family: 'Ubuntu', sans-serif;
+}
+
+
+h3 {
+	color: gray;
+}
+
+/*
 	Styling for other elements on the page
 */
+
+.spacer {
+	min-height: 40px;
+}
 
 .ilb {
 	display: inline-block;
@@ -9,19 +26,36 @@
 
 
 /*
-	Sourced from http://www.colorzilla.com/gradient-editor/
-	Creates a gradient background
+	Background Colors
 */
-.backdrop {
-	background: rgb(181,189,200);
-	background: -moz-linear-gradient(left, rgba(181,189,200,1) 0%, rgba(40,52,59,1) 50%, rgba(130,140,149,1) 100%);
-	background: -webkit-linear-gradient(left, rgba(181,189,200,1) 0%,rgba(40,52,59,1) 50%,rgba(130,140,149,1) 100%);
-	background: linear-gradient(to right, rgba(181,189,200,1) 0%,rgba(40,52,59,1) 50%,rgba(130,140,149,1) 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5bdc8', endColorstr='#828c95',GradientType=1 );
+.bgc_background {
+	background-color: #021930;
 }
 
-.backdrop_clear {
+.bgc_foreground {
+	background: #224E78;
+}
+
+.bgc_white {
 	background: white;
+}
+
+
+/*
+	Foreground colors
+*/
+.fgc_lightblue {
+	color: #8DADCC;
+}
+
+.fgc_black {
+	color: black;
+}
+
+
+/* Makes the borders rounded */
+.rounded {
+	border-radius: 10px;
 }
 
 /* Useful for making items dissappear*/
@@ -36,15 +70,15 @@
 */
 
 .pixel_small {
-	min-height: 30px;
-	min-width:  30px;
-	max-height: 30px;
-	max-width: 30px;
+	min-height: 35px;
+	min-width:  35px;
+	max-height: 35px;
+	max-width: 35px;
 	border: 1px solid black;
 	text-align: center;
 	font-size: : 10px;
 	/* Move the pixels closer together*/
-	margin: -2px -2px -2px -2px;
+	margin: -1px;
 }
 
 .pixel_large {
@@ -56,7 +90,7 @@
 	text-align: center;
 	font-size: 16px;
 	/* Move the pixels closer together*/
-	margin: -2px -2px -2px -2px;
+	margin: -1px;
 }
 
 
@@ -65,21 +99,30 @@
 */
 
 .pixel_selected {
-	background-color:#273279; 
+	background-color:#05294B; 
 	color: white;
 }
 
 .pixel_marked {
-	background-color:#5D337F; 
+	background-color:#2C054E; 
 	color: white;
 }
 
 .pixel_correct {
-	background-color:lightblue; 
+	background-color:#326700; 
 	color: white;
 }
 
 .pixel_incorrect {
 	background-color:red;
 	color: white; 
+}
+
+
+/* 
+	Text Formatting - Use this space for classes that affect how text looks
+*/
+
+.StatusText{
+	color: black;
 }
