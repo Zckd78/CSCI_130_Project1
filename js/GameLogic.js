@@ -41,7 +41,7 @@ if (document.addEventListener) { // IE >= 9; other browsers
 
 // Top level function for starting the game
 function startGame(xMax, yMax){
-
+    
 	// Remove the table elements before adding more
 	let table = document.getElementById("GameTable");
 	var rowCount = table.rows.length;
@@ -93,12 +93,19 @@ function addRow(xMax, y) {
     	// Position
     	let coordID = 'x'+x+'y'+y;
     	let coords = x+','+y;
-
+        
     	// Define the pixel div
-    	let tagStart = '<div';
+        let tagStart = '<div';
     	let tagEvents = ' onclick="pixelLeftClick(this)" onauxclick="pixelRightClick(this)"';
-    	let className = ' class="pixel_large"';
-    	let tagID = ' id="' + coordID + '">';
+    	let className = ' class="pixel_large';
+        //DY - Randomly assign elements
+        //REMOVE THIS WHEN IMPLEMENTING OTHER POPULATION METHODS
+        if (coinFlip()){ 
+            className += ' hasElement"'; //Add 'class: hasElement;
+        }
+        else
+            className += '"'; //Otherwise add nothing
+        let tagID = ' id="' + coordID + '">';
     	let contents = "";
     	let tagEnd = '</div>';
 
@@ -114,7 +121,14 @@ function addRow(xMax, y) {
     		let className = 'class="pixel_small"';
 			row.insertCell(x).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
     	}
+        
+        
 	}
+}
+
+//DY - Function to make a boolean yes/no for random assign.
+function coinFlip() {
+    return Math.floor(Math.random() * 2); //returns 1 or 0
 }
 
 /* 	Since the pixels pass themselves as (this), we can use their properties, and access
@@ -124,14 +138,30 @@ function pixelLeftClick(pixel){
 	// I'm alerting the id, although we have access to more.
 	// alert(pixel.id+" was left clicked");
 	
+    //DY - First check if pixel is solved or not -- if solved we don't want to touch it
+    if (!pixel.classList.contains("pixel_correct"))
+    {   //DY - Next check if it has an element -- if it does, mark solved
+        if (pixel.classList.contains("hasElement")) {
+            pixel.classList.add("pixel_correct");
+        } else { //DY - Else it's a miss, mark incorrect
+            pixel.classList.add("pixel_incorrect");
+        }
+    }
+    
+    
+    
+    
+    
 	// Add a class to the pixel
-	pixel.classList.add("pixel_selected");
+	//pixel.classList.add("pixel_selected");
+    
+    
 
 	// Remove other classes
-	pixel.classList.remove("pixel_marked");
+	//pixel.classList.remove("pixel_marked");
 
 	// Try adding new attribute
-	pixel.xCoord = "Test";
+	//pixel.xCoord = "Test";
 }
 
 
