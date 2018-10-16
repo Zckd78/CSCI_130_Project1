@@ -42,6 +42,11 @@ if (document.addEventListener) { // IE >= 9; other browsers
 // Top level function for starting the game
 function startGame(xMax, yMax){
     
+    //DY - If new game is clicked again, reset values to 0
+    document.getElementById("val_elements").innerHTML = 0;
+    document.getElementById("val_turns").innerHTML = 0;
+    document.getElementById("val_errors").innerHTML = 0;
+    
 	// Remove the table elements before adding more
 	let table = document.getElementById("GameTable");
 	var rowCount = table.rows.length;
@@ -65,6 +70,27 @@ function startGame(xMax, yMax){
     // Pass the args to generateTable
     generateTable(xMax,yMax);
 }
+
+//DY - Timer function
+// -- >> PROBLEM << --
+// Multiple clicks = multiple timers
+function startTimer() {
+    let time = 0;
+    document.getElementById("val_timer").innerHTML = 0;
+    clearTimer();
+    
+    function clearTimer(){
+        clearInterval(timerInt)
+    }
+    
+    function startTimer() { //DY - function for timer
+    var timer = document.getElementById("val_timer");
+    timer.innerHTML = ++time;
+    }
+    
+    var timerInt = setInterval(startTimer, 1000);
+}
+
 
 
 // Generates the Table based on the x and y Max args.
@@ -102,6 +128,7 @@ function addRow(xMax, y) {
         //REMOVE THIS WHEN IMPLEMENTING OTHER POPULATION METHODS
         if (coinFlip()){ 
             className += ' hasElement"'; //Add 'class: hasElement;
+            document.getElementById("val_elements").innerHTML++;
         }
         else
             className += '"'; //Otherwise add nothing
@@ -140,29 +167,32 @@ function pixelLeftClick(pixel){
 	
     //DY - First check if pixel is solved or not -- if solved we don't want to touch it
     if (!pixel.classList.contains("pixel_correct"))
-    {   //DY - Next check if it has an element -- if it does, mark solved
+    {   
+        //DY - Next check if it has an element -- if it does, mark solved
         if (pixel.classList.contains("hasElement")) {
+            //DY - mark correct
             pixel.classList.add("pixel_correct");
-        } else { //DY - Else it's a miss, mark incorrect
-            pixel.classList.add("pixel_incorrect");
+            //DY - increment turns
+            document.getElementById("val_turns").innerHTML++;
+            //DY Decrement elements
+            document.getElementById("val_elements").innerHTML--;
+        } else {
+            //DY - If already an error, do nothing
+            if (!pixel.classList.contains("pixel_incorrect")) {
+                //DY - Else it's a miss, mark incorrect
+                pixel.classList.add("pixel_incorrect");
+                //DY - increment turns
+                document.getElementById("val_turns").innerHTML++;
+                //DY Increment errors
+                document.getElementById("val_errors").innerHTML++;
+            }    
         }
     }
-    
-    
-    
-    
-    
-	// Add a class to the pixel
-	//pixel.classList.add("pixel_selected");
-    
-    
-
-	// Remove other classes
-	//pixel.classList.remove("pixel_marked");
-
-	// Try adding new attribute
-	//pixel.xCoord = "Test";
 }
+    
+    
+    
+    
 
 
 function pixelRightClick(pixel){
@@ -267,5 +297,18 @@ function addTable() {
     }
     myTableDiv.appendChild(table); // add the table that was created in the DOM 
 }
+
+
+	// Add a class to the pixel
+	//pixel.classList.add("pixel_selected");
+    
+    
+
+	// Remove other classes
+	//pixel.classList.remove("pixel_marked");
+
+	// Try adding new attribute
+	//pixel.xCoord = "Test";
+
 
 */
