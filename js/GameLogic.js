@@ -4,7 +4,16 @@
 	------------------------------[Variables]------------------------------
 */
 
+// ZS - Attempting to make a Pixel class to use in an array
+function Pixel() {
+	this.x = 0;
+	this.y =0;
+	this.isCorrect = false;
+	this.isMarked = false;
+	this.isError = false;
+}
 
+	var PixelArray = [][];
 
 
 
@@ -48,7 +57,7 @@ function startGame(xMax, yMax){
     document.getElementById("val_errors").innerHTML = 0;
     
 	// Remove the table elements before adding more
-	let table = document.getElementById("GameTable");
+	var table = document.getElementById("GameTable");
 	var rowCount = table.rows.length;
 	for (var i = 0; i < rowCount; i++) {
 		// Calling deleteRow(-1) deletes the last row
@@ -75,7 +84,7 @@ function startGame(xMax, yMax){
 // -- >> PROBLEM << --
 // Multiple clicks = multiple timers
 function startTimer() {
-    let time = 0;
+    var time = 0;
     document.getElementById("val_timer").innerHTML = 0;
     clearTimer();
     
@@ -98,7 +107,7 @@ function startTimer() {
 function generateTable(xMax,yMax){
 	
     // Loop through yMax, and create new rows
-	for (let y = 0; y < yMax; y++) {
+	for (var y = 0; y < yMax; y++) {
 		// Generates the Table, one row at a time
 		addRow(xMax, y);
 	}
@@ -107,9 +116,9 @@ function generateTable(xMax,yMax){
 // Creates a new row and set the pixels in place.
 function addRow(xMax, y) {
     // Access the elements from the DOM
-    let table = document.getElementById("GameTable");
-    let rowCount = table.rows.length;
-    let row = table.insertRow(rowCount);
+    var table = document.getElementById("GameTable");
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
 	// creation of the elements
     
     // row.insertCell(0).innerHTML= '<div id="'+id+'"></div>';
@@ -117,13 +126,14 @@ function addRow(xMax, y) {
     for (var x = 0; x < xMax; x++) {
 
     	// Position
-    	let coordID = 'x'+x+'y'+y;
-    	let coords = x+','+y;
+    	var coordID = 'x'+x+'y'+y;
+    	var coords = x+','+y;
         
     	// Define the pixel div
-        let tagStart = '<div';
-    	let tagEvents = ' onclick="pixelLeftClick(this)" onauxclick="pixelRightClick(this)"';
-    	let className = ' class="pixel_large';
+        var tagStart = '<div';
+    	var tagEvents = ' onclick="pixelLeftClick(this)" onauxclick="pixelRightClick(this)"';
+    	var className = ' class="pixel_large';        
+
         //DY - Randomly assign elements
         //REMOVE THIS WHEN IMPLEMENTING OTHER POPULATION METHODS
         if (coinFlip()){ 
@@ -132,10 +142,14 @@ function addRow(xMax, y) {
         }
         else
             className += '"'; //Otherwise add nothing
-        let tagID = ' id="' + coordID + '">';
-    	let contents = "";
-    	let tagEnd = '</div>';
+        
+        var tagID = ' id="' + coordID + '">';
+    	var contents = "";
+    	var tagEnd = '</div>';
 
+
+    	//ZS - Create the Pixel object
+    	var
 
     	/* --------------------------------------------------
     	  !!ATTENTION!! 
@@ -145,7 +159,7 @@ function addRow(xMax, y) {
     	if(xMax == 7){
 			row.insertCell(x).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
     	} else if (xMax == 13){
-    		let className = 'class="pixel_small"';
+    		var className = 'class="pixel_small"';
 			row.insertCell(x).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
     	}
         
@@ -206,7 +220,7 @@ function pixelRightClick(pixel){
 	pixel.classList.remove("pixel_selected");
 
 	// Get the coordinate object
-	let coords = getCoordsFromID(pixel.id);
+	var coords = getCoordsFromID(pixel.id);
 
 	// Alert the coordinates.
 	// alert("Coords of this pixel: (" + coords.x + "," + coords.y + ")");
@@ -216,14 +230,14 @@ function pixelRightClick(pixel){
 // Returns an object with x and y attrs.
 function getCoordsFromID(id){
 
-	let xVal = "";
-	let yVal = "";
+	var xVal = "";
+	var yVal = "";
 
 	// Check to make sure we have the correct input
 	if(id[0] == 'x'){
 
 		// Start looking at the first value after x
-		let i = 1;
+		var i = 1;
 		while(i<3){
 			if(id[i] == 'y'){
 				break;
@@ -252,7 +266,7 @@ function getCoordsFromID(id){
 // Given an element id, will cause the element to disappear from the page.
 function hideElement(id){
 	if(id != ""){
-		let obj = document.getElementById(id);
+		var obj = document.getElementById(id);
 		obj.classList.add("hidden");
 	}
 }
