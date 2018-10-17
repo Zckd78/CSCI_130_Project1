@@ -98,6 +98,11 @@ h3 {
 	Styles related to updating pixels
 */
 
+.pixel_hover {
+	border: 5px ridge #05294B;
+
+}
+
 .pixel_selected {
 	background-color:#05294B; 
 	color: white;

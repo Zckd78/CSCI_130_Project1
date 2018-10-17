@@ -5,17 +5,22 @@
 */
 
 // ZS - Attempting to make a Pixel class to use in an array
-function Pixel() {
-	this.x = 0;
-	this.y =0;
+function Pixel(x,y) {
+
+	//ZS - Only accept numbers.
+	if( !isNaN(x) && !isNaN(y) )
+	{
+		this.x = x;
+		this.y = y;	
+	}
+	// Defaults all false
 	this.isCorrect = false;
 	this.isMarked = false;
 	this.isError = false;
 }
-
-	var PixelArray = [][];
-
-
+	
+	//ZS - This becomes filled later in addRow()
+	// var PixelArray = [][];
 
 
 /* 
@@ -94,10 +99,11 @@ function startTimer() {
     
     function startTimer() { //DY - function for timer
     var timer = document.getElementById("val_timer");
-    timer.innerHTML = ++time;
+    time += 0.01;
+    timer.innerHTML = parseFloat(time).toFixed(2);
     }
     
-    var timerInt = setInterval(startTimer, 1000);
+    var timerInt = setInterval(startTimer, 10);
 }
 
 
@@ -125,6 +131,9 @@ function addRow(xMax, y) {
     // This create each pixel cell in the row
     for (var x = 0; x < xMax; x++) {
 
+    	//ZS - Create the Pixel object
+    	var pxl = new Pixel(x,y);
+
     	// Position
     	var coordID = 'x'+x+'y'+y;
     	var coords = x+','+y;
@@ -132,6 +141,7 @@ function addRow(xMax, y) {
     	// Define the pixel div
         var tagStart = '<div';
     	var tagEvents = ' onclick="pixelLeftClick(this)" onauxclick="pixelRightClick(this)"';
+    	tagEvents += ' onmouseenter="addHover(this)" onmouseleave="removeHover(this)"'
     	var className = ' class="pixel_large';        
 
         //DY - Randomly assign elements
@@ -139,6 +149,7 @@ function addRow(xMax, y) {
         if (coinFlip()){ 
             className += ' hasElement"'; //Add 'class: hasElement;
             document.getElementById("val_elements").innerHTML++;
+            pxl.isCorrect = true;
         }
         else
             className += '"'; //Otherwise add nothing
@@ -147,10 +158,7 @@ function addRow(xMax, y) {
     	var contents = "";
     	var tagEnd = '</div>';
 
-
-    	//ZS - Create the Pixel object
-    	var
-
+    	
     	/* --------------------------------------------------
     	  !!ATTENTION!! 
     	  Continue to update the div tags from HERE!
@@ -272,6 +280,13 @@ function hideElement(id){
 }
 
 
+function addHover(obj) {
+	obj.classList.add("pixel_hover");
+}
+
+function removeHover(obj) {
+	obj.classList.remove("pixel_hover");
+}
 
 /*
 
