@@ -1,11 +1,39 @@
 /* 
 	------------------------------[Variables]------------------------------
-	This area is for initializing variables
+	This area is for initializing global variables
 	------------------------------[Variables]------------------------------
 */
 
+// Used for the timer
+var time = 0;
+var timer;
+var timerSet = false;
+var timerInt;
 
+//ZS - The Pixels populate this later in addRow()
+var PixelArray = Array(13);
 
+// Make each element in the array another array.
+for (var i = 0; i < 13; i++) {
+	PixelArray[i] = Array(13);
+}
+
+// ZS - Attempting to make a Pixel class to use in an array
+function Pixel(x,y) {
+
+	//ZS - Only accept numbers.
+	if( !isNaN(x) && !isNaN(y) )
+	{
+		this.x = x;
+		this.y = y;	
+	}
+	// Defaults all false
+	this.isCorrect = false;
+	this.isMarked = false;
+	this.isError = false;
+}
+	
+	
 
 
 
@@ -48,7 +76,7 @@ function startGame(xMax, yMax){
     document.getElementById("val_errors").innerHTML = 0;
     
 	// Remove the table elements before adding more
-	let table = document.getElementById("GameTable");
+	var table = document.getElementById("GameTable");
 	var rowCount = table.rows.length;
 	for (var i = 0; i < rowCount; i++) {
 		// Calling deleteRow(-1) deletes the last row
@@ -75,66 +103,72 @@ function startGame(xMax, yMax){
 // -- >> PROBLEM << --
 // Multiple clicks = multiple timers
 function startTimer() {
-    let time = 0;
-    document.getElementById("val_timer").innerHTML = 0;
-    clearTimer();
-    
-    function clearTimer(){
-        clearInterval(timerInt)
-    }
-    
-    function startTimer() { //DY - function for timer
-    var timer = document.getElementById("val_timer");
-    timer.innerHTML = ++time;
-    }
-    
-    var timerInt = setInterval(startTimer, 1000);
+    time = 0;
+    clearTimer();    
+    timerInt = setInterval(incTimer, 10);
 }
 
+function incTimer() { //DY - function for timer
+    time += 0.01;
+    timer = document.getElementById("val_timer");
+    timer.innerHTML = parseFloat(time).toFixed(2);
+}
 
+function clearTimer(){
+	clearInterval(timerInt)
+}
 
 // Generates the Table based on the x and y Max args.
 // TODO - Make this function remove the existing table before generating the next one.
 function generateTable(xMax,yMax){
 	
     // Loop through yMax, and create new rows
-	for (let y = 0; y < yMax; y++) {
+	for (var y = 0; y < yMax; y++) {
 		// Generates the Table, one row at a time
 		addRow(xMax, y);
 	}
+	console.log(PixelArray);
 }
 
 // Creates a new row and set the pixels in place.
 function addRow(xMax, y) {
     // Access the elements from the DOM
-    let table = document.getElementById("GameTable");
-    let rowCount = table.rows.length;
-    let row = table.insertRow(rowCount);
+    var table = document.getElementById("GameTable");
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
 	// creation of the elements
     
     // row.insertCell(0).innerHTML= '<div id="'+id+'"></div>';
     // This create each pixel cell in the row
     for (var x = 0; x < xMax; x++) {
 
+    	//ZS - Create the Pixel object
+    	var pxl = new Pixel(x,y);
+
     	// Position
-    	let coordID = 'x'+x+'y'+y;
-    	let coords = x+','+y;
+    	var coordID = 'x'+x+'y'+y;
+    	var coords = x+','+y;
         
     	// Define the pixel div
-        let tagStart = '<div';
-    	let tagEvents = ' onclick="pixelLeftClick(this)" onauxclick="pixelRightClick(this)"';
-    	let className = ' class="pixel_large';
+        var tagStart = '<div';
+    	var tagEvents = ' onclick="pixelLeftClick(this)" onauxclick="pixelRightClick(this)"';
+    	// ZS - Add Hover effect to the pixels when mouse hovers over
+    	tagEvents += ' onmouseenter="addHover(this)" onmouseleave="removeHover(this)"'
+    	var className = ' class="pixel_large';        
+
         //DY - Randomly assign elements
         //REMOVE THIS WHEN IMPLEMENTING OTHER POPULATION METHODS
         if (coinFlip()){ 
             className += ' hasElement"'; //Add 'class: hasElement;
             document.getElementById("val_elements").innerHTML++;
+            pxl.isCorrect = true;
         }
         else
             className += '"'; //Otherwise add nothing
-        let tagID = ' id="' + coordID + '">';
-    	let contents = "";
-    	let tagEnd = '</div>';
+        
+        var tagID = ' id="' + coordID + '">';
+    	var contents = "";
+    	var tagEnd = '</div>';
 
 
     	/* --------------------------------------------------
@@ -145,10 +179,13 @@ function addRow(xMax, y) {
     	if(xMax == 7){
 			row.insertCell(x).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
     	} else if (xMax == 13){
-    		let className = 'class="pixel_small"';
+    		var className = 'class="pixel_small"';
 			row.insertCell(x).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
     	}
-        
+
+    	// Add this pixel to the array
+    	// Pixels can be addressed by [x][y]
+    	PixelArray[x][y] = pxl;        
         
 	}
 }
@@ -168,6 +205,32 @@ function pixelLeftClick(pixel){
     //DY - First check if pixel is solved or not -- if solved we don't want to touch it
     if (!pixel.classList.contains("pixel_correct"))
     {   
+    	// Get Pixel Coordinates
+    	var coords = getCoordsFromID(pixel.id);
+    	console.log('Pixel Clicked: (' + coords.x + ',' + coords.y + ')' )
+    	var pix = PixelArray[coords.x][coords.y];
+
+    	if(pix.isCorrect){
+    		//DY - mark correct
+            pixel.classList.add("pixel_correct");
+            //DY - increment turns
+            document.getElementById("val_turns").innerHTML++;
+            //DY Decrement elements
+            document.getElementById("val_elements").innerHTML--;
+    	} else {
+    		//DY - If already an error, do nothing
+            if (!pixel.classList.contains("pixel_incorrect")) {
+                //DY - Else it's a miss, mark incorrect
+                pixel.classList.add("pixel_incorrect");
+                //DY - increment turns
+                document.getElementById("val_turns").innerHTML++;
+                //DY Increment errors
+                document.getElementById("val_errors").innerHTML++;
+            }   
+    	}
+
+    	/* ZS - Removing this section as I implement the Array checking
+
         //DY - Next check if it has an element -- if it does, mark solved
         if (pixel.classList.contains("hasElement")) {
             //DY - mark correct
@@ -187,6 +250,9 @@ function pixelLeftClick(pixel){
                 document.getElementById("val_errors").innerHTML++;
             }    
         }
+
+        */
+
     }
 }
     
@@ -206,7 +272,7 @@ function pixelRightClick(pixel){
 	pixel.classList.remove("pixel_selected");
 
 	// Get the coordinate object
-	let coords = getCoordsFromID(pixel.id);
+	var coords = getCoordsFromID(pixel.id);
 
 	// Alert the coordinates.
 	// alert("Coords of this pixel: (" + coords.x + "," + coords.y + ")");
@@ -216,14 +282,14 @@ function pixelRightClick(pixel){
 // Returns an object with x and y attrs.
 function getCoordsFromID(id){
 
-	let xVal = "";
-	let yVal = "";
+	var xVal = "";
+	var yVal = "";
 
 	// Check to make sure we have the correct input
 	if(id[0] == 'x'){
 
 		// Start looking at the first value after x
-		let i = 1;
+		var i = 1;
 		while(i<3){
 			if(id[i] == 'y'){
 				break;
@@ -252,12 +318,19 @@ function getCoordsFromID(id){
 // Given an element id, will cause the element to disappear from the page.
 function hideElement(id){
 	if(id != ""){
-		let obj = document.getElementById(id);
+		var obj = document.getElementById(id);
 		obj.classList.add("hidden");
 	}
 }
 
 
+function addHover(obj) {
+	obj.classList.add("pixel_hover");
+}
+
+function removeHover(obj) {
+	obj.classList.remove("pixel_hover");
+}
 
 /*
 
