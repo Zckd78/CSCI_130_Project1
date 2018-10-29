@@ -40,6 +40,65 @@ h3 {
 	background: white;
 }
 
+/* Pixel custom colors */
+
+.bgc_pix0 {
+	background-color:black; 
+	color: white;
+}
+
+.bgc_pix1 {
+	background-color: #0A174A; 
+	color: white;
+}
+
+.bgc_pix2 {
+	background-color: #464400; 
+	color: white;
+}
+
+.bgc_pix3 {
+	background-color: #326700; 
+	color: white;
+}
+
+.bgc_pix4 {
+	background-color: #3C0348; 
+	color: white;
+}
+
+/* Grid custom colors */
+
+.bgc_grid0 {
+	background-color: white;
+}
+
+.bgc_grid1 {
+	background-color: #0A38F5;
+}
+
+.bgc_grid2 {
+	background-color: #FFFB5B;
+}
+
+.bgc_grid3 {
+	background-color: #0FEF36;
+}
+
+.bgc_grid4 {
+	background-color: #F50F74;
+}
+
+
+/* Good for control groups */
+.bgc_primary1 {
+	background-color: #3A638B;
+}
+
+.bgc_primary4 {
+	background-color: #05294B;
+}
+
 
 /*
 	Foreground colors
@@ -52,6 +111,9 @@ h3 {
 	color: black;
 }
 
+.fgc_white {
+	color: white;
+}
 
 /* Makes the borders rounded */
 .rounded {
@@ -70,10 +132,10 @@ h3 {
 */
 
 .pixel_small {
-	min-height: 35px;
-	min-width:  35px;
-	max-height: 35px;
-	max-width: 35px;
+	min-height: 40px;
+	min-width:  40px;
+	max-height: 40px;
+	max-width: 40px;
 	border: 1px solid black;
 	text-align: center;
 	font-size: : 10px;
@@ -82,10 +144,10 @@ h3 {
 }
 
 .pixel_large {
-	min-height: 45px;
-	min-width:  45px;
-	max-height: 45px;
-	max-width: 45px;
+	min-height: 50px;
+	min-width:  50px;
+	max-height: 50px;
+	max-width: 50px;
 	border: 1px solid black;
 	text-align: center;
 	font-size: 16px;

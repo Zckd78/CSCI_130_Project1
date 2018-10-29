@@ -4,6 +4,21 @@
 	------------------------------[Variables]------------------------------
 */
 
+// ZS - User for Color selection
+// ZS - Changed during game setup
+var colorGridBackground = "bgc_grid0";
+var colorPixelCorrect = "bgc_pix0";
+
+// ZS - Globalizing Sidebar variables
+var gameTurns = 0;
+var domTurns = undefined;
+
+var gameElements = 0;
+var domElements = undefined;
+
+var gameErrors = 0;
+var domErrors = undefined;
+
 // Used for the timer
 var time = 0;
 var timer;
@@ -13,7 +28,7 @@ var timerInt;
 //ZS - The Pixels populate this later in addRow()
 var PixelArray = Array(13);
 
-// Make each element in the array another array.
+// ZS - Make each element in the array another array.
 for (var i = 0; i < 13; i++) {
 	PixelArray[i] = Array(13);
 }
@@ -33,9 +48,6 @@ function Pixel(x,y) {
 	this.isError = false;
 }
 	
-	
-
-
 
 /* 
 	------------------------------[Initializing]------------------------------
@@ -43,6 +55,13 @@ function Pixel(x,y) {
 	Use it for initializing the page
 	------------------------------[Initializing]------------------------------
 */
+
+
+// Handle updating the Color sliders 
+var rangeRed = document.getElementById("color_range_red");
+var rangeGreen = document.getElementById("color_range_green");
+var rangeBlue = document.getElementById("color_range_blue");
+
 
 
 // Sourced from https://stackoverflow.com/questions/4909167/how-to-add-a-custom-right-click-menu-to-a-webpage#4909312
@@ -70,11 +89,11 @@ if (document.addEventListener) { // IE >= 9; other browsers
 // Top level function for starting the game
 function startGame(xMax, yMax){
     
-    //DY - If new game is clicked again, reset values to 0
-    document.getElementById("val_elements").innerHTML = 0;
-    document.getElementById("val_turns").innerHTML = 0;
-    document.getElementById("val_errors").innerHTML = 0;
-    
+    // If new game is clicked again, reset values to 0
+    gameTurns = 0;
+    gameErrors = 0;
+    gameElements = 0;
+
 	// Remove the table elements before adding more
 	var table = document.getElementById("GameTable");
 	var rowCount = table.rows.length;
@@ -83,17 +102,17 @@ function startGame(xMax, yMax){
 		// so we just call this rowCount times
     	table.deleteRow(-1);
 	}
-	
-    
+	    
 
     // Use this space to trigger other actions when the game starts.
-    // Start the game timer
-    // Randomize the correct pixels
-    // Do other stuff before the game starts...
+
+    // Setup DOM objects
+    domTurns = document.getElementById("val_turns");
+    domElements = document.getElementById("val_elements");
+    domErrors = document.getElementById("val_errors");
 
     // Reveal the status bar on the side
-    var statusBar = document.getElementById("GameStatus");
-    statusBar.classList.remove("hidden");
+    $("#GameContainer").fadeIn();
 
     // Pass the args to generateTable
     generateTable(xMax,yMax);
@@ -119,7 +138,6 @@ function clearTimer(){
 }
 
 // Generates the Table based on the x and y Max args.
-// TODO - Make this function remove the existing table before generating the next one.
 function generateTable(xMax,yMax){
 	
     // Loop through yMax, and create new rows
@@ -127,6 +145,7 @@ function generateTable(xMax,yMax){
 		// Generates the Table, one row at a time
 		addRow(xMax, y);
 	}
+    // ZS - Debugging
 	console.log(PixelArray);
 }
 
@@ -154,13 +173,20 @@ function addRow(xMax, y) {
     	var tagEvents = ' onclick="pixelLeftClick(this)" onauxclick="pixelRightClick(this)"';
     	// ZS - Add Hover effect to the pixels when mouse hovers over
     	tagEvents += ' onmouseenter="addHover(this)" onmouseleave="removeHover(this)"'
-    	var className = ' class="pixel_large';        
+    	
+        // ZS - Build the class list for this pixel
+        // Change the pixel size based on the board size
+        var className = "";        
+        if(xMax == 7){
+            className = 'class="pixel_large ' + colorGridBackground + '"';
+        } else if (xMax == 13){
+            var className = 'class="pixel_small ' + colorGridBackground + '"';
+        }
 
         //DY - Randomly assign elements
         //REMOVE THIS WHEN IMPLEMENTING OTHER POPULATION METHODS
         if (coinFlip()){ 
-            className += ' hasElement"'; //Add 'class: hasElement;
-            document.getElementById("val_elements").innerHTML++;
+            domElements.innerHTML = ++gameElements;
             pxl.isCorrect = true;
         }
         else
@@ -176,12 +202,9 @@ function addRow(xMax, y) {
     	  Continue to update the div tags from HERE!
     	  This space is what places the pixels in a line.
     	 -------------------------------------------------- */ 
-    	if(xMax == 7){
-			row.insertCell(x).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
-    	} else if (xMax == 13){
-    		var className = 'class="pixel_small"';
-			row.insertCell(x).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
-    	}
+    	// Place the pixel
+        row.insertCell(x).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
+    	
 
     	// Add this pixel to the array
     	// Pixels can be addressed by [x][y]
@@ -211,48 +234,23 @@ function pixelLeftClick(pixel){
     	var pix = PixelArray[coords.x][coords.y];
 
     	if(pix.isCorrect){
-    		//DY - mark correct
-            pixel.classList.add("pixel_correct");
-            //DY - increment turns
-            document.getElementById("val_turns").innerHTML++;
-            //DY Decrement elements
-            document.getElementById("val_elements").innerHTML--;
+    		//Mark correct
+            pixel.classList.replace(colorGridBackground,colorPixelCorrect);
+            // Increment turns
+            domTurns.innerHTML = ++gameTurns;
+            // Decrement elements
+            domElements.innerHTML = --gameElements;
     	} else {
     		//DY - If already an error, do nothing
             if (!pixel.classList.contains("pixel_incorrect")) {
                 //DY - Else it's a miss, mark incorrect
                 pixel.classList.add("pixel_incorrect");
                 //DY - increment turns
-                document.getElementById("val_turns").innerHTML++;
+                domTurns.innerHTML = ++gameTurns;
                 //DY Increment errors
-                document.getElementById("val_errors").innerHTML++;
+                domErrors.innerHTML = ++gameErrors;
             }   
     	}
-
-    	/* ZS - Removing this section as I implement the Array checking
-
-        //DY - Next check if it has an element -- if it does, mark solved
-        if (pixel.classList.contains("hasElement")) {
-            //DY - mark correct
-            pixel.classList.add("pixel_correct");
-            //DY - increment turns
-            document.getElementById("val_turns").innerHTML++;
-            //DY Decrement elements
-            document.getElementById("val_elements").innerHTML--;
-        } else {
-            //DY - If already an error, do nothing
-            if (!pixel.classList.contains("pixel_incorrect")) {
-                //DY - Else it's a miss, mark incorrect
-                pixel.classList.add("pixel_incorrect");
-                //DY - increment turns
-                document.getElementById("val_turns").innerHTML++;
-                //DY Increment errors
-                document.getElementById("val_errors").innerHTML++;
-            }    
-        }
-
-        */
-
     }
 }
     
@@ -323,7 +321,9 @@ function hideElement(id){
 	}
 }
 
-
+/* 
+    Functions used for onmouseover
+*/
 function addHover(obj) {
 	obj.classList.add("pixel_hover");
 }
@@ -332,9 +332,108 @@ function removeHover(obj) {
 	obj.classList.remove("pixel_hover");
 }
 
+function UpdatePixelColor(obj) {
+    
+    // Reset all colors to non-selected
+    var pixelColorDivs = document.getElementsByName("color_select_pixel");
+    for (var i = 0; i < pixelColorDivs.length; i++) {
+        pixelColorDivs[i].classList.remove("pixel_hover");
+    }
+
+    // Get the second class, which should be the background color class.
+    var colorClass = obj.classList.item(1);
+    // Debugging
+    console.log(colorClass + " selected for the Pixel Color.");
+
+    // Set the color of pixels generated.
+    colorPixelCorrect = colorClass;
+
+    // Show the color as being selected
+    obj.classList.add("pixel_hover");
+}
+
+function UpdateGridColor(obj) {
+    
+    // Reset all colors to non-selected
+    var gridColorDivs = document.getElementsByName("color_select_grid");
+    for (var i = 0; i < gridColorDivs.length; i++) {
+        gridColorDivs[i].classList.remove("pixel_hover");
+    }
+
+    // Get the second class, which should be the background color class.
+    var colorClass = obj.classList.item(1);
+    // Debugging
+    console.log(colorClass + " selected for the Grid Color.");
+
+    // Set the color of pixels generated.
+    colorGridBackground = colorClass;
+
+    // Show the color as being selected
+    obj.classList.add("pixel_hover");
+
+}
+
+
+
+
 /*
 
 Code Graveyard - Dig this up later if needed. 
+
+
+function ToggleTextColor() {
+    colorText = (colorText == 0) ? 1 : 0 ;
+    var allText = Array(10);
+
+    // ZS - Generate the tags and gather their DOM objects.
+    for (var i = 0; i < 6; i++) {
+        var tag = "h" + i;
+        allText[i] = document.getElementsByTagName(tag);
+    }
+
+    // ZS - DEBUG 
+    console.log(allText);
+        
+    if(colorText == 0) {
+        ReplaceClasses(allText,"fgc_white", "fgc_black");    
+    } else {
+
+        ReplaceClasses(allText,"fgc_black", "fgc_white");
+    }
+    
+}
+
+
+// ZS - When given a list, can replace all classes on 
+//      DOM objects in aboth 1D and 2D arrays
+function ReplaceClasses(elems, oldClass, newClass){
+
+    for (var i = 0; i < elems.length; i++) {
+        // ZS - Hangle multiple hits    
+        if(elems instanceof HTMLCollection) {
+            if ( elems[i] instanceof Array) {
+                for (var j = 0; j < elems[i].length; j++) {
+                    elems[i][j].classList.Remove(oldClass);
+                    elems[i][j].classList.Add(newClass);
+                    console.log("2D Class " + oldClass + " replaced with " + newClass);
+                }
+            }
+        } else {
+            if(elems instanceof Array) {
+                console.log(elems);
+                elems[i].classList.Remove(oldClass);
+                elems[i].classList.Add(newClass);
+                console.log("1D Class " + oldClass + " replaced with " + newClass);
+            } else {
+                elems.classList.Remove(oldClass);
+                elems.classList.Add(newClass);
+                console.log("Class " + oldClass + " replaced with " + newClass);
+            }
+        }
+    }
+}
+
+
 
 Sourced from https://blackboard.learn.fresnostate.edu/bbcswebdav/pid-2341195-dt-content-rid-49956440_1/courses/CSCI130-02-76194-2187/class_javascript_dom_dynatable.html
 
