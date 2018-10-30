@@ -233,14 +233,17 @@ function pixelLeftClick(pixel){
     	console.log('Pixel Clicked: (' + coords.x + ',' + coords.y + ')' )
     	var pix = PixelArray[coords.x][coords.y];
 
-    	if(pix.isCorrect){
+        // Only mark the Pixel if unmarked
+    	if(pix.isCorrect && !pix.isMarked){
     		//Mark correct
             pixel.classList.replace(colorGridBackground,colorPixelCorrect);
+            // Update the pixel
+            pix.isMarked = true;
             // Increment turns
             domTurns.innerHTML = ++gameTurns;
             // Decrement elements
             domElements.innerHTML = --gameElements;
-    	} else {
+    	} else if(!pix.isCorrect) {
     		//DY - If already an error, do nothing
             if (!pixel.classList.contains("pixel_incorrect")) {
                 //DY - Else it's a miss, mark incorrect
