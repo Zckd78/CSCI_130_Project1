@@ -112,7 +112,10 @@ function startGame(xMax, yMax){
     domErrors = document.getElementById("val_errors");
 
     // Reveal the status bar on the side
-    $("#GameContainer").fadeIn();
+    // ZS - This is an example of jQuery
+    $("#GameContainer").slideDown();
+
+    $("#PreGame_Selections").slideUp();
 
     // Pass the args to generateTable
     generateTable(xMax,yMax);

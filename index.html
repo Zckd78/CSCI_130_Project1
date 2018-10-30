@@ -16,16 +16,17 @@
 		<div id="TopContainer" class="container-fluid rounded">
 			<div id="TopRow" class="row align-items-center">
 				<div class="col-lg-2"> </div>
-				<div id="MainDiv" class="col-lg-8 bgc_foreground fgc_lightblue rounded pl-0 pr-0 ">			
+				<div id="TitleDiv" class="col-lg-8 bgc_foreground fgc_lightblue rounded pl-0 pr-0 ">	
 					<div class="container-fluid bgc_primary4 pb-4 rounded">
-						<div class="col-3"> </div>
+						<div class="col-12"> 
 							<center>
 								<h1> Team 20's Picross Game </h1> 
-								<h3> written by David Yates & Zachary Scott </h3> <br><br>	
+								<h3> written by David Yates & Zachary Scott </h3>
 							</center>
+						</div>
 						<div class="container-fluid bgc_primary1 shadow rounded">
 							<!-- This Div below is used for Pre-Game choices -->
-							<div id="PreGame_Selections" class="row justify-content-center pt-2">
+							<div id="PreGame_Selections" class="row justify-content-center pt-2 mt-4">
 								<div class="col-2"> </div>
 								<div class="col-5">
 									
@@ -45,39 +46,6 @@
 										<div class="pixel_small bgc_grid3" name="color_select_grid" onclick="UpdateGridColor(this);"> </div>
 										<div class="pixel_small bgc_grid4" name="color_select_grid" onclick="UpdateGridColor(this);"> </div>
 									</div>
-
-									<!--  	ZS - Inputs for changing the color of text, grid, and pixels
-											Removed in favor or single choice boxes.
-									 
-									<div class="form-group form-check-inline">
-										<input type="radio" class="form-check-input" id="color_select_Grid" checked>
-										<label class="form-check-label" for="color_select_Grid">Grid</label>
-									</div>
-
-									<div class="form-group form-check-inline">
-										<input type="radio" class="form-check-input" id="color_select_Pixel"> 
-										<label class="form-check-label" for="color_select_Pixel">Pixel</label>
-									</div>
-
-									<div class="form-group">
-										<label for="color_range_red">Red</label>
-										<input type="range" min="0" max="255" value="50" class="slider" id="color_range_red"> 
-									</div>
-
-									<div class="form-group">
-										<label for="color_range_green">Green</label>
-										<input type="range" min="0" max="255" value="50" class="slider" id="color_range_green">
-									</div>	
-
-									<div class="form-group">
-										<label for="color_range_blue">Blue</label>
-										<input type="range" min="0" max="255" value="50" class="slider" id="color_range_blue">
-									</div>
-									<div class="form-group">
-										<input class="btn btn-dark" type="button" id="submit" value="Apply Colors" onclick="ToggleTextColor();">
-									</div>
-									-->
-
 								</div>
 								<div class="col-5"> 
 									<div class="form-group"> 
@@ -90,8 +58,7 @@
 						</div>
 					</div>
 					<!-- Below section is for the Game stage -->
-					 <br> <br>
-					<div id="GameContainer" class="container hidden">
+					<div id="GameContainer" class="container hidden mt-4">
 						<div class="row"  style="margin-bottom: 100px;">
 							<!-- Color Changing Section -->
 							<div class="col-1"> 
