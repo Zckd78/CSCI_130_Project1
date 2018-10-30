@@ -12,6 +12,10 @@ h3 {
 	color: gray;
 }
 
+thead tr td {
+	border: 1px solid black;
+}
+
 /*
 	Styling for other elements on the page
 */
@@ -191,4 +195,16 @@ h3 {
 
 .StatusText{
 	color: black;
+}
+
+
+/*
+	List Formatting - Used for the hints
+*/
+
+.list_hints {
+	color:black;
+  	list-style: none;
+  	padding: 0px 0px 0px 45%;
+  	margin: 0px 0px 0px 0px;
 }

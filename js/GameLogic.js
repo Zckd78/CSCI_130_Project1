@@ -70,7 +70,6 @@ function startGame(xMax, yMax){
     	table.deleteRow(-1);
 	}
 	    
-
     // Use this space to trigger other actions when the game starts.
 
     // Setup DOM objects
@@ -78,7 +77,7 @@ function startGame(xMax, yMax){
     domElements = document.getElementById("val_elements");
     domErrors = document.getElementById("val_errors");
 
-    // Reveal the status bar on the side
+    // Reveal the Game board, and hide the configuration section
     // ZS - This is an example of jQuery
     $("#GameContainer").slideDown();
 
@@ -86,6 +85,9 @@ function startGame(xMax, yMax){
 
     // Pass the args to generateTable
     generateTable(xMax,yMax);
+
+    // Testing the Hint system
+    // alert("Hints for first Column: " + getHints("y",0,xMax));
 }
 
 //DY - Timer function
@@ -110,6 +112,12 @@ function clearTimer(){
 // Generates the Table based on the x and y Max args.
 function generateTable(xMax,yMax){
 	
+    // ZS - Create the 2D array of Pixel objects before we create the table items
+    generateGrid(xMax,yMax);
+
+    // ZS - Need to incorporate the Hints for top and sides here
+    addHintRow(yMax);
+
     // Loop through yMax, and create new rows
 	for (var y = 0; y < yMax; y++) {
 		// Generates the Table, one row at a time
@@ -119,20 +127,120 @@ function generateTable(xMax,yMax){
 	console.log(PixelArray);
 }
 
+// Creates the hints along the top row of the table
+function addHintRow(yMax) {
+    var table = document.getElementById("GameTable");
+    var tableHead = document.createElement("thead");
+    var tableRow = document.createElement("tr");
+
+    // Create a Table Data for each pixel
+    for (var i = 0; i < yMax; i++) {
+        var tableData = document.createElement("td");
+        var hints = getHints("y", i, yMax);
+        console.log("Hints at column " + i + " are: " + hints );
+        var list = document.createElement("ul"); 
+        list.classList.add("list_hints");
+        // Place the hints in a list.
+        for (var j = 0; j < hints.length; j++) {
+            if(hints[j] > 0){
+                // Create a list item, fill it with hint number, and attach to list.
+                var item = document.createElement("li");
+                item.innerHTML = hints[j];
+                list.appendChild(item);
+            }            
+        }
+        // Attach List to Table data
+        tableData.appendChild(list);
+
+        // Attach the td to tr
+        tableRow.appendChild(tableData);
+    }
+
+    // Attach the row to the table head
+    tableHead.appendChild(tableRow);
+
+    // Finally, attach the Table Head to the table.
+    table.appendChild(tableHead);
+
+}
+
+// Expects either "x" or "y" as the plane to operate.
+// Returns an array of the hints
+function getHints(plane, pos, max) {
+    
+    // Counts of hints, plus c as a incrementer
+    var counts = Array(max);
+    // Fill the array with zeroes to be incremented
+    for (var i = 0; i < 10; i++) {
+        counts[i] = 0;
+    }
+    var c = 0;
+
+    if( plane.toLowerCase() == "y" ){
+        // The counts are in order of how we should show them.
+        for (var i = 0; i <= max; i++) {
+            // Add a count of pixels in a row
+            if(PixelArray[pos][i] && PixelArray[pos][i].isCorrect){
+                counts[c]++;
+            } else if(PixelArray[pos][i] && !PixelArray[pos][i].isCorrect && counts[c] > 0){
+                // If found an incorrect one, move into the next counts space.
+                c++;
+            }            
+        }
+    } else if( plane.toLowerCase() == "x" ){
+        // The counts in order reflect how we should show them.
+        for (var i = 0; i <= max; i++) {
+            // Add a count of pixels in a row
+            if(PixelArray[i][pos] && PixelArray[i][pos].isCorrect){
+                counts[c]++;
+            } else if(PixelArray[i][pos] && !PixelArray[i][pos].isCorrect && counts[c] > 0){
+                // If found an incorrect one, move into the next counts space.
+                c++;
+            }            
+        }
+
+    }
+    return counts;
+}
+
+
+// Create the entire Grid of Pixels before we generate the table.
+function generateGrid(xMax,yMax){
+
+    for (var y = 0; y < yMax; y++) {
+        for (var x = 0; x < xMax; x++) {
+
+            //ZS - Create the Pixel object
+            var pxl = new Pixel(x,y);
+
+            //DY - Randomly assign elements
+            //REMOVE THIS WHEN IMPLEMENTING OTHER POPULATION METHODS
+            if (coinFlip()){ 
+                domElements.innerHTML = ++gameElements;
+                pxl.isCorrect = true;
+            }
+
+            // Add this pixel to the array
+            // Pixels can be addressed by [x][y]
+            PixelArray[x][y] = pxl; 
+
+        }
+    }
+
+}
+
 // Creates a new row and set the pixels in place.
 function addRow(xMax, y) {
     // Access the elements from the DOM
     var table = document.getElementById("GameTable");
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
-	// creation of the elements
-    
-    // row.insertCell(0).innerHTML= '<div id="'+id+'"></div>';
+	
+    // First, we create the Hints for the Row
+    // row.insertCell(x)
+
     // This create each pixel cell in the row
     for (var x = 0; x < xMax; x++) {
-
-    	//ZS - Create the Pixel object
-    	var pxl = new Pixel(x,y);
 
     	// Position
     	var coordID = 'x'+x+'y'+y;
@@ -152,15 +260,6 @@ function addRow(xMax, y) {
         } else if (xMax == 13){
             var className = 'class="pixel_small ' + colorGridBackground + '"';
         }
-
-        //DY - Randomly assign elements
-        //REMOVE THIS WHEN IMPLEMENTING OTHER POPULATION METHODS
-        if (coinFlip()){ 
-            domElements.innerHTML = ++gameElements;
-            pxl.isCorrect = true;
-        }
-        else
-            className += '"'; //Otherwise add nothing
         
         var tagID = ' id="' + coordID + '">';
     	var contents = "";
@@ -174,12 +273,6 @@ function addRow(xMax, y) {
     	 -------------------------------------------------- */ 
     	// Place the pixel
         row.insertCell(x).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
-    	
-
-    	// Add this pixel to the array
-    	// Pixels can be addressed by [x][y]
-    	PixelArray[x][y] = pxl;        
-        
 	}
 }
 
