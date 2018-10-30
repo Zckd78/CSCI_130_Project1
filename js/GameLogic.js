@@ -4,10 +4,6 @@
 	------------------------------[Variables]------------------------------
 */
 
-// ZS - User for Color selection
-// ZS - Changed during game setup
-var colorGridBackground = "bgc_grid0";
-var colorPixelCorrect = "bgc_pix0";
 
 // ZS - Globalizing Sidebar variables
 var gameTurns = 0;
@@ -48,35 +44,6 @@ function Pixel(x,y) {
 	this.isError = false;
 }
 	
-
-/* 
-	------------------------------[Initializing]------------------------------
-	This area is for code that needs to run first.
-	Use it for initializing the page
-	------------------------------[Initializing]------------------------------
-*/
-
-
-// Handle updating the Color sliders 
-var rangeRed = document.getElementById("color_range_red");
-var rangeGreen = document.getElementById("color_range_green");
-var rangeBlue = document.getElementById("color_range_blue");
-
-
-
-// Sourced from https://stackoverflow.com/questions/4909167/how-to-add-a-custom-right-click-menu-to-a-webpage#4909312
-// Runs first to disable the context menu with Right clicking
-if (document.addEventListener) { // IE >= 9; other browsers
-    document.addEventListener('contextmenu', function(e) {
-        // alert("You've tried to open context menu"); //here you draw your own menu
-        e.preventDefault();
-    }, false);
-} else { // IE < 9
-    document.attachEvent('oncontextmenu', function() {
-        // alert("You've tried to open context menu");
-        window.event.returnValue = false;
-    });
-}
 
 
 /* 
@@ -216,11 +183,6 @@ function addRow(xMax, y) {
 	}
 }
 
-//DY - Function to make a boolean yes/no for random assign.
-function coinFlip() {
-    return Math.floor(Math.random() * 2); //returns 1 or 0
-}
-
 /* 	Since the pixels pass themselves as (this), we can use their properties, and access
 	their children through the DOM.
 */
@@ -259,10 +221,6 @@ function pixelLeftClick(pixel){
     	}
     }
 }
-    
-    
-    
-    
 
 
 function pixelRightClick(pixel){
@@ -282,211 +240,3 @@ function pixelRightClick(pixel){
 	// alert("Coords of this pixel: (" + coords.x + "," + coords.y + ")");
 }
 
-// Derives the coordinates of the pixel from the id given.
-// Returns an object with x and y attrs.
-function getCoordsFromID(id){
-
-	var xVal = "";
-	var yVal = "";
-
-	// Check to make sure we have the correct input
-	if(id[0] == 'x'){
-
-		// Start looking at the first value after x
-		var i = 1;
-		while(i<3){
-			if(id[i] == 'y'){
-				break;
-			}
-			else {
-				xVal += id[i++];
-			}		
-		}
-		
-		// Increment again to skip the "y"
-		i++;
-
-		// Start looking for the y value
-		while(i<id.length){
-			yVal += id[i++];
-		}
-	}
-
-	// Return an object with both x and y values
-	return {
-		"x" : xVal,
-		"y" : yVal 
-	};
-}
-
-// Given an element id, will cause the element to disappear from the page.
-function hideElement(id){
-	if(id != ""){
-		var obj = document.getElementById(id);
-		obj.classList.add("hidden");
-	}
-}
-
-/* 
-    Functions used for onmouseover
-*/
-function addHover(obj) {
-	obj.classList.add("pixel_hover");
-}
-
-function removeHover(obj) {
-	obj.classList.remove("pixel_hover");
-}
-
-function UpdatePixelColor(obj) {
-    
-    // Reset all colors to non-selected
-    var pixelColorDivs = document.getElementsByName("color_select_pixel");
-    for (var i = 0; i < pixelColorDivs.length; i++) {
-        pixelColorDivs[i].classList.remove("pixel_hover");
-    }
-
-    // Get the second class, which should be the background color class.
-    var colorClass = obj.classList.item(1);
-    // Debugging
-    console.log(colorClass + " selected for the Pixel Color.");
-
-    // Set the color of pixels generated.
-    colorPixelCorrect = colorClass;
-
-    // Show the color as being selected
-    obj.classList.add("pixel_hover");
-}
-
-function UpdateGridColor(obj) {
-    
-    // Reset all colors to non-selected
-    var gridColorDivs = document.getElementsByName("color_select_grid");
-    for (var i = 0; i < gridColorDivs.length; i++) {
-        gridColorDivs[i].classList.remove("pixel_hover");
-    }
-
-    // Get the second class, which should be the background color class.
-    var colorClass = obj.classList.item(1);
-    // Debugging
-    console.log(colorClass + " selected for the Grid Color.");
-
-    // Set the color of pixels generated.
-    colorGridBackground = colorClass;
-
-    // Show the color as being selected
-    obj.classList.add("pixel_hover");
-
-}
-
-
-
-
-/*
-
-Code Graveyard - Dig this up later if needed. 
-
-
-function ToggleTextColor() {
-    colorText = (colorText == 0) ? 1 : 0 ;
-    var allText = Array(10);
-
-    // ZS - Generate the tags and gather their DOM objects.
-    for (var i = 0; i < 6; i++) {
-        var tag = "h" + i;
-        allText[i] = document.getElementsByTagName(tag);
-    }
-
-    // ZS - DEBUG 
-    console.log(allText);
-        
-    if(colorText == 0) {
-        ReplaceClasses(allText,"fgc_white", "fgc_black");    
-    } else {
-
-        ReplaceClasses(allText,"fgc_black", "fgc_white");
-    }
-    
-}
-
-
-// ZS - When given a list, can replace all classes on 
-//      DOM objects in aboth 1D and 2D arrays
-function ReplaceClasses(elems, oldClass, newClass){
-
-    for (var i = 0; i < elems.length; i++) {
-        // ZS - Hangle multiple hits    
-        if(elems instanceof HTMLCollection) {
-            if ( elems[i] instanceof Array) {
-                for (var j = 0; j < elems[i].length; j++) {
-                    elems[i][j].classList.Remove(oldClass);
-                    elems[i][j].classList.Add(newClass);
-                    console.log("2D Class " + oldClass + " replaced with " + newClass);
-                }
-            }
-        } else {
-            if(elems instanceof Array) {
-                console.log(elems);
-                elems[i].classList.Remove(oldClass);
-                elems[i].classList.Add(newClass);
-                console.log("1D Class " + oldClass + " replaced with " + newClass);
-            } else {
-                elems.classList.Remove(oldClass);
-                elems.classList.Add(newClass);
-                console.log("Class " + oldClass + " replaced with " + newClass);
-            }
-        }
-    }
-}
-
-
-
-Sourced from https://blackboard.learn.fresnostate.edu/bbcswebdav/pid-2341195-dt-content-rid-49956440_1/courses/CSCI130-02-76194-2187/class_javascript_dom_dynatable.html
-
-
-function deleteRow(obj) {
-    let index = obj.parentNode.parentNode.rowIndex;
-    let table = document.getElementById("myTableData");
-    table.deleteRow(index);
-}
-
-// It creates automaticlally a new table with it fills it with elements
-function addTable() {
-    let myTableDiv = document.getElementById("myDynamicTable"); // need a handle to an element   
-    let table = document.createElement('TABLE'); // creation of HTML code , notice you dont close the table !
-	
-	// Easy to get confused between CSS and DOM syntac to manipulate the attributes
-    table.border='1';
-	table.style.borderCollapse='collapse';
-    let tableBody = document.createElement('TBODY');
-    table.appendChild(tableBody);
-	let sizerow=6;
-	let sizecol=10;
-    for (let i=0; i<sizerow; i++){
-       let tr = document.createElement('TR');
-       tableBody.appendChild(tr);
-      
-       for (let j=0; j<sizecol; j++){
-           let td = document.createElement('TD');
-           td.width='75'; // you can set some elements related to the style directly through the DOM
-           td.appendChild(document.createTextNode("cell (" + i + "," + j + ")"));
-           tr.appendChild(td);
-       }
-    }
-    myTableDiv.appendChild(table); // add the table that was created in the DOM 
-}
-
-
-	// Add a class to the pixel
-	//pixel.classList.add("pixel_selected");
-    
-    
-
-	// Remove other classes
-	//pixel.classList.remove("pixel_marked");
-
-	// Try adding new attribute
-	//pixel.xCoord = "Test";
-
-
-*/
