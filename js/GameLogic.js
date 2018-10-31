@@ -22,11 +22,11 @@ var timerSet = false;
 var timerInt;
 
 //ZS - The Pixels populate this later in addRow()
-var PixelArray = Array(13);
+var PixelArray = Array(14);
 
 // ZS - Make each element in the array another array.
-for (var i = 0; i < 13; i++) {
-	PixelArray[i] = Array(13);
+for (var i = 0; i < 14; i++) {
+	PixelArray[i] = Array(14);
 }
 
 // ZS - Attempting to make a Pixel class to use in an array
@@ -133,9 +133,17 @@ function addHintRow(yMax) {
     var tableHead = document.createElement("thead");
     var tableRow = document.createElement("tr");
 
+    // Create an empty space for the Horizontal hints
+    var tableData = document.createElement("td");
+    // Add styling classes
+    tableData.classList.add("bgc_foreground");
+    tableData.classList.add("no_border");
+    // Attach the td to tr
+    tableRow.appendChild(tableData);
+
     // Create a Table Data for each pixel
     for (var i = 0; i < yMax; i++) {
-        var tableData = document.createElement("td");
+        tableData = document.createElement("td");
         var hints = getHints("y", i, yMax);
         console.log("Hints at column " + i + " are: " + hints );
         var list = document.createElement("ul"); 
@@ -236,8 +244,20 @@ function addRow(xMax, y) {
     var rowCount = table.rows.length;
     var row = table.insertRow(rowCount);
 	
-    // First, we create the Hints for the Row
-    // row.insertCell(x)
+    // Dealing with the first row..
+    var tableData = document.createElement("td");
+    // Build the hints in a span
+    var hintData = "<center><span class='fgc_black p-2'> ";
+    var hints = getHints("x",y,xMax);
+    for (var i = 0; i < hints.length; i++) {
+         if(hints[i] > 0)
+            hintData += hints[i] + "  ";
+    }
+    hintData += "</span></center>";
+    tableData.innerHTML = hintData;
+    // Attach the td to tr
+    row.appendChild(tableData);
+    
 
     // This create each pixel cell in the row
     for (var x = 0; x < xMax; x++) {
@@ -271,8 +291,9 @@ function addRow(xMax, y) {
     	  Continue to update the div tags from HERE!
     	  This space is what places the pixels in a line.
     	 -------------------------------------------------- */ 
-    	// Place the pixel
-        row.insertCell(x).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
+    	// Place the pixel, x+1 user since we have to insert the Hint cell first.
+        var pos = x+1;
+        row.insertCell(pos).innerHTML= tagStart + tagEvents + className + tagID + contents + tagEnd;
 	}
 }
 
