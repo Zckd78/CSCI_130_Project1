@@ -82,11 +82,11 @@ function hideElement(id){
     Functions used for onmouseover
 */
 function addHover(obj) {
-	obj.classList.add("pixel_hover");
+	obj.classList.add("hover_select");
 }
 
 function removeHover(obj) {
-	obj.classList.remove("pixel_hover");
+	obj.classList.remove("hover_select");
 }
 
 function UpdatePixelColor(obj) {
@@ -94,7 +94,7 @@ function UpdatePixelColor(obj) {
     // Reset all colors to non-selected
     var pixelColorDivs = document.getElementsByName("color_select_pixel");
     for (var i = 0; i < pixelColorDivs.length; i++) {
-        pixelColorDivs[i].classList.remove("pixel_hover");
+        pixelColorDivs[i].classList.remove("hover_select");
     }
 
     // Get the second class, which should be the background color class.
@@ -106,7 +106,7 @@ function UpdatePixelColor(obj) {
     colorPixelCorrect = colorClass;
 
     // Show the color as being selected
-    obj.classList.add("pixel_hover");
+    obj.classList.add("hover_select");
 }
 
 function UpdateGridColor(obj) {
@@ -114,7 +114,7 @@ function UpdateGridColor(obj) {
     // Reset all colors to non-selected
     var gridColorDivs = document.getElementsByName("color_select_grid");
     for (var i = 0; i < gridColorDivs.length; i++) {
-        gridColorDivs[i].classList.remove("pixel_hover");
+        gridColorDivs[i].classList.remove("hover_select");
     }
 
     // Get the second class, which should be the background color class.
@@ -126,6 +126,6 @@ function UpdateGridColor(obj) {
     colorGridBackground = colorClass;
 
     // Show the color as being selected
-    obj.classList.add("pixel_hover");
+    obj.classList.add("hover_select");
 
 }

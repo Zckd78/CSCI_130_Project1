@@ -21,6 +21,10 @@ var timer;
 var timerSet = false;
 var timerInt;
 
+// Used throughout
+var xMaximum = 0;
+var yMaximum = 0;
+
 //ZS - The Pixels populate this later in addRow()
 var PixelArray = Array(14);
 
@@ -41,10 +45,9 @@ function Pixel(x,y) {
 	// Defaults all false
 	this.isCorrect = false;
 	this.isMarked = false;
-	this.isError = false;
+    this.isError = false;
 }
 	
-
 
 /* 
 	------------------------------[FUNCTIONS]------------------------------
@@ -60,6 +63,10 @@ function startGame(xMax, yMax){
     gameTurns = 0;
     gameErrors = 0;
     gameElements = 0;
+
+    // Set the Maximums
+    xMaximum = xMax;
+    yMaximum = yMax;
 
 	// Remove the table elements before adding more
 	var table = document.getElementById("GameTable");
@@ -84,7 +91,7 @@ function startGame(xMax, yMax){
     $("#PreGame_Selections").slideUp();
 
     // Pass the args to generateTable
-    generateTable(xMax,yMax);
+    generateTable();
 
     // Testing the Hint system
     // alert("Hints for first Column: " + getHints("y",0,xMax));
@@ -110,25 +117,25 @@ function clearTimer(){
 }
 
 // Generates the Table based on the x and y Max args.
-function generateTable(xMax,yMax){
+function generateTable(){
 	
     // ZS - Create the 2D array of Pixel objects before we create the table items
-    generateGrid(xMax,yMax);
+    generateGrid();
 
     // ZS - Need to incorporate the Hints for top and sides here
-    addHintRow(yMax);
+    addHintRow();
 
     // Loop through yMax, and create new rows
-	for (var y = 0; y < yMax; y++) {
+	for (var y = 0; y < yMaximum; y++) {
 		// Generates the Table, one row at a time
-		addRow(xMax, y);
+		addRow(y);
 	}
     // ZS - Debugging
 	console.log(PixelArray);
 }
 
 // Creates the hints along the top row of the table
-function addHintRow(yMax) {
+function addHintRow() {
     var table = document.getElementById("GameTable");
     var tableHead = document.createElement("thead");
     var tableRow = document.createElement("tr");
@@ -142,9 +149,9 @@ function addHintRow(yMax) {
     tableRow.appendChild(tableData);
 
     // Create a Table Data for each pixel
-    for (var i = 0; i < yMax; i++) {
+    for (var i = 0; i < yMaximum; i++) {
         tableData = document.createElement("td");
-        var hints = getHints("y", i, yMax);
+        var hints = getHints("y", i);
         console.log("Hints at column " + i + " are: " + hints );
         var list = document.createElement("ul"); 
         list.classList.add("list_hints");
@@ -174,10 +181,10 @@ function addHintRow(yMax) {
 
 // Expects either "x" or "y" as the plane to operate.
 // Returns an array of the hints
-function getHints(plane, pos, max) {
+function getHints(plane, pos) {
     
     // Counts of hints, plus c as a incrementer
-    var counts = Array(max);
+    var counts = Array(yMaximum);
     // Fill the array with zeroes to be incremented
     for (var i = 0; i < 10; i++) {
         counts[i] = 0;
@@ -186,7 +193,7 @@ function getHints(plane, pos, max) {
 
     if( plane.toLowerCase() == "y" ){
         // The counts are in order of how we should show them.
-        for (var i = 0; i <= max; i++) {
+        for (var i = 0; i <= yMaximum; i++) {
             // Add a count of pixels in a row
             if(PixelArray[pos][i] && PixelArray[pos][i].isCorrect){
                 counts[c]++;
@@ -197,7 +204,7 @@ function getHints(plane, pos, max) {
         }
     } else if( plane.toLowerCase() == "x" ){
         // The counts in order reflect how we should show them.
-        for (var i = 0; i <= max; i++) {
+        for (var i = 0; i <= yMaximum; i++) {
             // Add a count of pixels in a row
             if(PixelArray[i][pos] && PixelArray[i][pos].isCorrect){
                 counts[c]++;
@@ -213,10 +220,10 @@ function getHints(plane, pos, max) {
 
 
 // Create the entire Grid of Pixels before we generate the table.
-function generateGrid(xMax,yMax){
+function generateGrid(){
 
-    for (var y = 0; y < yMax; y++) {
-        for (var x = 0; x < xMax; x++) {
+    for (var y = 0; y < yMaximum; y++) {
+        for (var x = 0; x < xMaximum; x++) {
 
             //ZS - Create the Pixel object
             var pxl = new Pixel(x,y);
@@ -226,6 +233,8 @@ function generateGrid(xMax,yMax){
             if (coinFlip()){ 
                 domElements.innerHTML = ++gameElements;
                 pxl.isCorrect = true;
+            } else {
+                pxl.isError = true;
             }
 
             // Add this pixel to the array
@@ -238,7 +247,7 @@ function generateGrid(xMax,yMax){
 }
 
 // Creates a new row and set the pixels in place.
-function addRow(xMax, y) {
+function addRow( y) {
     // Access the elements from the DOM
     var table = document.getElementById("GameTable");
     var rowCount = table.rows.length;
@@ -248,7 +257,7 @@ function addRow(xMax, y) {
     var tableData = document.createElement("td");
     // Build the hints in a span
     var hintData = "<center><span class='fgc_black p-2'> ";
-    var hints = getHints("x",y,xMax);
+    var hints = getHints("x",y,xMaximum);
     for (var i = 0; i < hints.length; i++) {
          if(hints[i] > 0)
             hintData += hints[i] + "  ";
@@ -260,7 +269,7 @@ function addRow(xMax, y) {
     
 
     // This create each pixel cell in the row
-    for (var x = 0; x < xMax; x++) {
+    for (var x = 0; x < xMaximum; x++) {
 
     	// Position
     	var coordID = 'x'+x+'y'+y;
@@ -275,9 +284,9 @@ function addRow(xMax, y) {
         // ZS - Build the class list for this pixel
         // Change the pixel size based on the board size
         var className = "";        
-        if(xMax == 7){
+        if(xMaximum == 7){
             className = 'class="pixel_large ' + colorGridBackground + '"';
-        } else if (xMax == 13){
+        } else if (xMaximum == 13){
             var className = 'class="pixel_small ' + colorGridBackground + '"';
         }
         
@@ -334,9 +343,40 @@ function pixelLeftClick(pixel){
             }   
     	}
     }
+
+    // Check if we've won the game
+    if(hasWon()){
+        alert("You solved this puzzle in " + time + " seconds!");
+        clearTimer();
+    }
+
 }
 
 
+function hasWon(){
+
+    // First check elements reduced to zero
+    if(gameElements < 1){
+        // Next we check all pixels
+        for (var x = 0; x < xMaximum; x++) {
+            for (var y = 0; y < yMaximum; y++) {
+                var pxl = PixelArray[x][y];
+                // Encountering pixel that is Correct but not marked, no win.
+                if( !pxl.isError && pxl.isCorrect && !pxl.isMarked ){
+                    return false;
+                }
+
+            }
+        }
+        // If reached this far, puzzle completed.
+        return true;
+
+    } else {
+        console.log(gameElements + " still remain.");
+    }
+}
+
+// Candidate for deletion...
 function pixelRightClick(pixel){
 	// I'm alerting the id, although we have access to more.
 	// alert(pixel.id+" was right clicked");

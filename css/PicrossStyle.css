@@ -145,10 +145,10 @@ li {
 */
 
 .pixel_small {
-	min-height: 40px;
-	min-width:  40px;
-	max-height: 40px;
-	max-width: 40px;
+	min-height: 35px;
+	min-width:  35px;
+	max-height: 35px;
+	max-width: 35px;
 	text-align: center;
 	font-size: : 10px;
 	/* Move the pixels closer together*/
@@ -174,7 +174,7 @@ li {
 	Styles related to updating pixels
 */
 
-.pixel_hover {
+.hover_select {
 	border: 5px ridge #05294B;
 }
 
