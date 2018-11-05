@@ -456,12 +456,12 @@ function suggestMove(){
 
     // Check if we need to disable the button because 2 suggestions were made
     if(suggestedCorrect && suggestedWrong){
+        // Get the Button DOM Object and make it disabled.
         var btn = document.getElementById("btn_suggest")
-
         btn.classList.add("disabled");
+        // remove the onclick event handler
         btn.onclick = null;
     }
-
 
 }
 
