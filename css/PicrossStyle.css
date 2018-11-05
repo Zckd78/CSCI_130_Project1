@@ -8,20 +8,6 @@ body * {
 }
 
 
-h3 {
-	color: gray;
-}
-
-/* Used for Vertical Hints*/
-thead tr td {
-	border: 1px solid black;
-}
-
-/* Used for Vertical Hints*/
-li {
-	margin: -3px 0px -3px 0px;
-}
-
 /*
 	Styling for other elements on the page
 */
@@ -113,6 +99,11 @@ li {
 /*
 	Foreground colors
 */
+
+.status {
+	color: #3A638B;
+}
+
 .fgc_lightblue {
 	color: #8DADCC;
 }
@@ -178,6 +169,11 @@ li {
 	border: 5px ridge #05294B;
 }
 
+
+.suggestion {
+	border: 5px ridge #05294B;
+}
+
 .pixel_selected {
 	background-color:#05294B; 
 	color: white;
@@ -217,4 +213,14 @@ li {
   	list-style: none;
   	padding: 0px 0px 0px 45%;
   	margin: 0px 0px 0px 0px;
+}
+
+/* Used for Vertical Hints*/
+thead tr td {
+	border: 1px solid black;
+}
+
+/* Used for Vertical Hints*/
+li {
+	margin: -3px 0px -3px 0px;
 }

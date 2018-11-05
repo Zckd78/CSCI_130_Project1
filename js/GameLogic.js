@@ -15,11 +15,24 @@ var domElements = undefined;
 var gameErrors = 0;
 var domErrors = undefined;
 
+var gameScore = 0;
+var domScore = undefined;
+
+// Used for the suggestions
+var suggestedCorrect = false;
+var suggestedWrong = false;
+
+
 // Used for the timer
 var time = 0;
 var timer;
 var timerSet = false;
 var timerInt;
+
+// ZS - User for Color selection
+// ZS - Changed during game setup
+var colorGridBackground = "bgc_grid0";
+var colorPixelCorrect = "bgc_pix0";
 
 // Used throughout
 var xMaximum = 0;
@@ -63,6 +76,7 @@ function startGame(xMax, yMax){
     gameTurns = 0;
     gameErrors = 0;
     gameElements = 0;
+    gameScore = 0;
 
     // Set the Maximums
     xMaximum = xMax;
@@ -83,12 +97,17 @@ function startGame(xMax, yMax){
     domTurns = document.getElementById("val_turns");
     domElements = document.getElementById("val_elements");
     domErrors = document.getElementById("val_errors");
+    domScore = document.getElementById("val_score");
+
+
+    // Hide the game info section
+    $("#GameInfo").slideUp(250);
 
     // Reveal the Game board, and hide the configuration section
     // ZS - This is an example of jQuery
     $("#GameContainer").slideDown();
+    $("#PreGame_Selections").slideUp(250);
 
-    $("#PreGame_Selections").slideUp();
 
     // Pass the args to generateTable
     generateTable();
@@ -98,8 +117,6 @@ function startGame(xMax, yMax){
 }
 
 //DY - Timer function
-// -- >> PROBLEM << --
-// Multiple clicks = multiple timers
 function startTimer() {
     time = 0;
     clearTimer();    
@@ -279,7 +296,7 @@ function addRow( y) {
         var tagStart = '<div';
     	var tagEvents = ' onclick="pixelLeftClick(this)" onauxclick="pixelRightClick(this)"';
     	// ZS - Add Hover effect to the pixels when mouse hovers over
-    	tagEvents += ' onmouseenter="addHover(this)" onmouseleave="removeHover(this)"'
+    	tagEvents += ' onmouseenter="AddHover(this)" onmouseleave="RemoveHover(this)"'
     	
         // ZS - Build the class list for this pixel
         // Change the pixel size based on the board size
@@ -310,10 +327,8 @@ function addRow( y) {
 	their children through the DOM.
 */
 function pixelLeftClick(pixel){
-	// I'm alerting the id, although we have access to more.
-	// alert(pixel.id+" was left clicked");
 	
-    //DY - First check if pixel is solved or not -- if solved we don't want to touch it
+    // First check if pixel is solved or not -- if solved we don't want to touch it
     if (!pixel.classList.contains("pixel_correct"))
     {   
     	// Get Pixel Coordinates
@@ -350,6 +365,12 @@ function pixelLeftClick(pixel){
         clearTimer();
     }
 
+    updateScore();
+}
+
+function updateScore(){
+    gameScore = (Math.max((gameElements - gameErrors),0) / gameElements).toFixed(2);
+    domScore.innerHTML = gameScore;
 }
 
 
@@ -374,6 +395,74 @@ function hasWon(){
     } else {
         console.log(gameElements + " still remain.");
     }
+}
+
+
+// Flips a coin to either give the a viable move, or an incorrect one
+function suggestMove(){
+
+    var chance = coinFlip();
+
+    var randX = Math.floor(Math.random() * xMaximum);
+    var randY = Math.floor(Math.random() * yMaximum);
+
+    var testPixel = PixelArray[randX][randY];
+
+    var suggestCorrect = false;
+
+    // Determine if given Right or Wrong pixel
+    if(chance){
+        suggestCorrect = true;
+    } 
+
+    // If True, give a correct move
+    if(suggestCorrect && suggestedCorrect == false){
+
+        // Keep trying pixels until we find that that isn't marked, and is correct
+        while(!testPixel.isCorrect && !testPixel.isMarked){
+            randX = Math.floor(Math.random() * xMaximum);
+            randY = Math.floor(Math.random() * yMaximum);
+            testPixel = PixelArray[randX][randY];
+        }
+
+        console.log("Randomly picked the correct Pixel @ (" + randX + "," + randY + ")");
+
+        // Make the Pixel pop out
+        var pix = document.getElementById("x" + randX + "y" + randY);
+        pix.classList.add("tadaAnimate");
+        // Update that we suggested a good move
+        suggestedCorrect = true;
+
+    } else if(suggestedWrong == false) {
+
+        // Else give a bad move
+        // Keep trying pixels until we find that that isn't marked, and is
+        while(testPixel.isCorrect && !testPixel.isMarked){
+            randX = Math.floor(Math.random() * xMaximum);
+            randY = Math.floor(Math.random() * yMaximum);
+            testPixel = PixelArray[randX][randY];
+        }
+
+        console.log("Randomly picked the wrong Pixel @ (" + randX + "," + randY + ")");
+
+        // Make the Pixel pop out
+        var pix = document.getElementById("x" + randX + "y" + randY);
+        pix.classList.add("tadaAnimate");
+
+        // Update that we suggested a bad move
+        suggestedWrong = true;
+
+    }   
+
+    // Check if we need to disable the button because 2 suggestions were made
+    if(suggestedCorrect && suggestedWrong){
+        var btn = document.getElementById("btn_suggest")
+
+        btn.classList.add("disabled");
+        btn.onclick = null;
+    }
+
+
 }
 
 // Candidate for deletion...

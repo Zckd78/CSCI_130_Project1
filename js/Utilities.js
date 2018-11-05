@@ -1,8 +1,5 @@
 
-// ZS - User for Color selection
-// ZS - Changed during game setup
-var colorGridBackground = "bgc_grid0";
-var colorPixelCorrect = "bgc_pix0";
+
 
 /* 
 	------------------------------[Initializing]------------------------------
@@ -70,22 +67,14 @@ function getCoordsFromID(id){
 	};
 }
 
-// Given an element id, will cause the element to disappear from the page.
-function hideElement(id){
-	if(id != ""){
-		var obj = document.getElementById(id);
-		obj.classList.add("hidden");
-	}
-}
-
 /* 
     Functions used for onmouseover
 */
-function addHover(obj) {
+function AddHover(obj) {
 	obj.classList.add("hover_select");
 }
 
-function removeHover(obj) {
+function RemoveHover(obj) {
 	obj.classList.remove("hover_select");
 }
 
@@ -127,5 +116,10 @@ function UpdateGridColor(obj) {
 
     // Show the color as being selected
     obj.classList.add("hover_select");
+
+}
+
+
+function MenuClick(obj) {
 
 }
