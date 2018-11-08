@@ -18,6 +18,15 @@ var domErrors = undefined;
 var gameScore = 0;
 var domScore = undefined;
 
+var gameLevel = 1;
+var domLevel = undefined;
+
+// Modes:
+// 0 = Arcade
+// 1 = Time Attack
+var gameMode = undefined;
+
+
 // Used for the suggestions
 var suggestedCorrect = false;
 var suggestedWrong = false;
@@ -38,13 +47,8 @@ var colorPixelCorrect = "bgc_pix0";
 var xMaximum = 0;
 var yMaximum = 0;
 
-//ZS - The Pixels populate this later in addRow()
-var PixelArray = Array(14);
-
-// ZS - Make each element in the array another array.
-for (var i = 0; i < 14; i++) {
-	PixelArray[i] = Array(14);
-}
+//ZS - The Pixels populate this later
+var PixelArray;
 
 // ZS - Attempting to make a Pixel class to use in an array
 function Pixel(x,y) {
@@ -69,8 +73,67 @@ function Pixel(x,y) {
 	------------------------------[FUNCTIONS]------------------------------
 */
 
+// Used to configure the size of the grid being played
+function setSize(size){
+
+    var size7 = document.getElementById("size7Btn");
+    var size13 = document.getElementById("size13Btn");
+
+    if(size == 7 || size == 13){
+        // Set the size variables
+        xMaximum = size;
+        yMaximum = size;
+
+        // Update the Size Buttons
+        if( size == 7 ){
+            size7.classList.replace("btn-secondary", "btn-dark");
+            size13.classList.replace("btn-dark", "btn-secondary");
+        } else if( size == 13 ){
+            size7.classList.replace("btn-dark", "btn-secondary");
+            size13.classList.replace("btn-secondary", "btn-dark");
+        }
+    }
+}
+
+
+function setGameMode(mode){
+    
+    var arcadeBtn = document.getElementById("arcadeBtn");
+    var attackBtn = document.getElementById("attackBtn");
+
+    if(mode == 0 | mode == 1) {
+        gameMode = mode;
+
+        // Update the Size Buttons
+        if( mode == 0 ){
+            arcadeBtn.classList.replace("btn-secondary", "btn-dark");
+            attackBtn.classList.replace("btn-dark", "btn-secondary");
+        } else if( mode == 1 ){
+            arcadeBtn.classList.replace("btn-dark", "btn-secondary");
+            attackBtn.classList.replace("btn-secondary", "btn-dark");
+        }
+
+    }
+}
+
+function tryStartGame(){
+
+    var setupHint = document.getElementById("setupHint");
+
+    if(gameMode == undefined || xMaximum == undefined) {
+        setupHint.classList.remove("hidden");
+    } else {
+        setupHint.classList.add("hidden");
+
+        startGame();
+    }
+
+}
+
+
+
 // Top level function for starting the game
-function startGame(xMax, yMax){
+function startGame(){
     
     // If new game is clicked again, reset values to 0
     gameTurns = 0;
@@ -78,9 +141,14 @@ function startGame(xMax, yMax){
     gameElements = 0;
     gameScore = 0;
 
-    // Set the Maximums
-    xMaximum = xMax;
-    yMaximum = yMax;
+    // Create the PixelArray
+    PixelArray = Array(xMaximum);
+
+    // ZS - Make each element in the array another array.
+    for (var i = 0; i < xMaximum; i++) {
+        PixelArray[i] = Array(xMaximum);
+    }
+
 
 	// Remove the table elements before adding more
 	var table = document.getElementById("GameTable");
@@ -90,8 +158,6 @@ function startGame(xMax, yMax){
 		// so we just call this rowCount times
     	table.deleteRow(-1);
 	}
-	    
-    // Use this space to trigger other actions when the game starts.
 
     // Setup DOM objects
     domTurns = document.getElementById("val_turns");
@@ -99,6 +165,25 @@ function startGame(xMax, yMax){
     domErrors = document.getElementById("val_errors");
     domScore = document.getElementById("val_score");
 
+
+    // Decide here how to proceed.
+
+
+
+
+    
+
+    // ZS - Create the 2D array of Pixel objects before we create the table items
+    generateGrid();
+
+    // Pass the args to generateTable
+    generateTable();
+
+    // Test Sending the Grid to the server to save.
+    SendGrid(xMaximum + "x" + yMaximum + "_Level_" + gameLevel,xMaximum);
+
+    // Testing Level Saving
+    gameLevel++;
 
     // Hide the game info section
     $("#GameInfo").slideUp(250);
@@ -109,26 +194,26 @@ function startGame(xMax, yMax){
     $("#PreGame_Selections").slideUp(250);
 
 
-    // Pass the args to generateTable
-    generateTable();
-
-    // Testing the Hint system
-    // alert("Hints for first Column: " + getHints("y",0,xMax));
+    startTimer();
 }
 
+
+/*
+============================================
+    Timer Functions 
+============================================
+*/
 //DY - Timer function
 function startTimer() {
     time = 0;
     clearTimer();    
     timerInt = setInterval(incTimer, 10);
 }
-
 function incTimer() { //DY - function for timer
     time += 0.01;
     timer = document.getElementById("val_timer");
     timer.innerHTML = parseFloat(time).toFixed(2);
 }
-
 function clearTimer(){
 	clearInterval(timerInt)
 }
@@ -136,9 +221,6 @@ function clearTimer(){
 // Generates the Table based on the x and y Max args.
 function generateTable(){
 	
-    // ZS - Create the 2D array of Pixel objects before we create the table items
-    generateGrid();
-
     // ZS - Need to incorporate the Hints for top and sides here
     addHintRow();
 
@@ -150,6 +232,12 @@ function generateTable(){
     // ZS - Debugging
 	console.log(PixelArray);
 }
+
+/*
+============================================
+    Hint Functions 
+============================================
+*/
 
 // Creates the hints along the top row of the table
 function addHintRow() {
@@ -210,7 +298,7 @@ function getHints(plane, pos) {
 
     if( plane.toLowerCase() == "y" ){
         // The counts are in order of how we should show them.
-        for (var i = 0; i <= yMaximum; i++) {
+        for (var i = 0; i < yMaximum; i++) {
             // Add a count of pixels in a row
             if(PixelArray[pos][i] && PixelArray[pos][i].isCorrect){
                 counts[c]++;
@@ -221,7 +309,7 @@ function getHints(plane, pos) {
         }
     } else if( plane.toLowerCase() == "x" ){
         // The counts in order reflect how we should show them.
-        for (var i = 0; i <= yMaximum; i++) {
+        for (var i = 0; i < yMaximum; i++) {
             // Add a count of pixels in a row
             if(PixelArray[i][pos] && PixelArray[i][pos].isCorrect){
                 counts[c]++;
@@ -235,6 +323,12 @@ function getHints(plane, pos) {
     return counts;
 }
 
+
+/*
+============================================
+    Grid Generation Functions 
+============================================
+*/
 
 // Create the entire Grid of Pixels before we generate the table.
 function generateGrid(){
@@ -262,6 +356,12 @@ function generateGrid(){
     }
 
 }
+
+/*
+============================================
+    Table building
+============================================
+*/
 
 // Creates a new row and set the pixels in place.
 function addRow( y) {
@@ -335,6 +435,7 @@ function pixelLeftClick(pixel){
     	var coords = getCoordsFromID(pixel.id);
     	console.log('Pixel Clicked: (' + coords.x + ',' + coords.y + ')' )
     	var pix = PixelArray[coords.x][coords.y];
+        console.log(pix);
 
         // Only mark the Pixel if unmarked
     	if(pix.isCorrect && !pix.isMarked){
@@ -363,9 +464,9 @@ function pixelLeftClick(pixel){
     if(hasWon()){
         alert("You solved this puzzle in " + time + " seconds!");
         clearTimer();
+    } else {
+        updateScore();
     }
-
-    updateScore();
 }
 
 function updateScore(){
@@ -392,9 +493,7 @@ function hasWon(){
         // If reached this far, puzzle completed.
         return true;
 
-    } else {
-        console.log(gameElements + " still remain.");
-    }
+    } 
 }
 
 
@@ -481,5 +580,99 @@ function pixelRightClick(pixel){
 
 	// Alert the coordinates.
 	// alert("Coords of this pixel: (" + coords.x + "," + coords.y + ")");
+}
+
+
+/*
+============================================
+    Server interaction functions 
+============================================
+*/
+
+function SendGrid(Name, Size){
+
+    // Create the JSON var, supplied with the random array.
+    var jsonData = {
+        "Name": Name,
+        "Size": Size,
+        "Grid" : PixelArray
+    };
+
+    console.log("Making Request for " + Name);
+    MakeRequest("POST", "server.php", "add=1&json="+JSON.stringify(jsonData) , serverReply);
+}
+
+
+function GetGrid(Size, Level) {
+    var fileName = "file="+ Size + "x" + Size + "Level_"+ Level;
+    console.log("Making Request for " + fileName);
+    MakeRequest("POST", "server.php", fileName, retrieveGrid);
+}
+
+// Calls out to the server using the provided arguments
+function MakeRequest(method, phpFile, sendData, callback) {
+    httpRequest = new XMLHttpRequest(); // create the object
+    if (!httpRequest) { // check if the object was properly created
+      // issues with the browser, example: old browser
+      alert('Cannot create an XMLHTTP instance');
+      return false;
+    }
+    // Assign the function to call when the response comes back
+    httpRequest.onreadystatechange = callback; 
+    // Open the request as a POST command to server.php
+    httpRequest.open(method, phpFile);
+    // Set the content type
+    httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    // Stringify the data to sent over to the server.
+    httpRequest.send(sendData);
+}
+
+
+// Calls out to the server using the provided arguments
+function MakeJSONRequest(method, phpFile, jsonObj, callback) {
+    httpRequest = new XMLHttpRequest(); // create the object
+    if (!httpRequest) { // check if the object was properly created
+      // issues with the browser, example: old browser
+      alert('Cannot create an XMLHTTP instance');
+      return false;
+    }
+    // Assign the function to call when the response comes back
+    httpRequest.onreadystatechange = callback; 
+    // Open the request as a POST command to server.php
+    httpRequest.open(method, phpFile);
+    // Set the content type
+    httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    // Stringify the data to sent over to the server.
+    var sendString = "json="+JSON.stringify(jsonObj);
+    httpRequest.send(sendString);
+}
+
+
+
+function retrieveGrid(){
+    // Only continue if the response was finished, and returned code 200 for OK
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+        if (httpRequest.status === 200) {      
+            
+            console.log(httpRequest.responseText);
+
+            var responseObject = JSON.parse(httpRequest.responseText);
+            // Set the HTML to this response 
+            PixelArray = responseObject.Grid;
+            
+        }
+    }
+}
+
+
+
+
+function serverReply(){
+    // Only continue if the response was finished, and returned code 200 for OK
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+        if (httpRequest.status === 200) {      
+            console.log(httpRequest.responseText);
+        }
+    }
 }
 

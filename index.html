@@ -54,9 +54,15 @@
 
 						<!-- This Div below is used for Pre-Game choices -->
 						<div id="PreGame_Selections" class="container-fluid bgc_primary1 rounded pt-2">
-							<div class="row justify-content-center p-2">
-								<div class="col-2"> </div>
-								<div class="col-5">
+							<div class="row">
+								<div id="setupHint"  class="col-12 hidden p-4">
+									<div class="card">
+										<div class="card-header fgc_black bg-danger"> Select at least the size and mode to play before beginning. </div>
+									</div>
+								</div>
+							</div>
+							<div class="row justify-content-center p-1">
+								<div class="col-5 col-md-4">
 									<!-- Color Selection -->
 									<div class="form-group form-check-inline">
 										<label class="form-check-label pr-2" for="color_select_pixel">Pixel Color</label> <br>
@@ -76,12 +82,25 @@
 									</div>
 									<!-- End Color selection -->
 								</div>
-								<div class="col-5"> 
+								<div class="col-2"> 
 									<!-- Grid Size Selection -->
 									<div class="form-group"> 
-										<label> Choose a grid size to start:  </label> <br>
-										<input class="btn btn-primary"  type="button" value="7 x 7" onclick="startGame(7,7); startTimer();">
-										<input class="btn btn-primary" type="button" value="13 x 13" onclick="startGame(13,13); startTimer();">
+										<label> Choose a grid size:  </label> <br>
+										<input class="btn btn-secondary" id="size7Btn" type="button" value="7x7" onclick="setSize(7);">
+										<input class="btn btn-secondary" id="size13Btn" type="button" value="13x13" onclick="setSize(13)">
+									</div>									
+								</div>
+								<div class="col-3"> 
+									<div class="form-group"> 
+									<label> Choose a game mode:  </label> <br>
+									<input class="btn btn-secondary" id="arcadeBtn" type="button" value="Arcade" onclick="setGameMode(0)">
+									<input class="btn btn-secondary" id="attackBtn" type="button" value="Time-Attack" onclick="setGameMode(1)">
+									</div>
+								</div>
+								<div class="col-2"> 
+									<div class="form-group"> 
+									<label> Start the game?  </label> <br>
+									<input class="btn btn-success" type="button" value="Start!" onclick="tryStartGame();">
 									</div>
 								</div>
 							</div>
