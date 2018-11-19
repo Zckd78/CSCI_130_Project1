@@ -167,7 +167,7 @@ function startGame(){
 
 
     // Decide here how to proceed.
-
+    
 
 
 
@@ -597,16 +597,16 @@ function SendGrid(Name, Size){
         "Size": Size,
         "Grid" : PixelArray
     };
-
+    
     console.log("Making Request for " + Name);
     MakeRequest("POST", "server.php", "add=1&json="+JSON.stringify(jsonData) , serverReply);
 }
 
 
 function GetGrid(Size, Level) {
-    var fileName = "file="+ Size + "x" + Size + "Level_"+ Level;
-    console.log("Making Request for " + fileName);
-    MakeRequest("POST", "server.php", fileName, retrieveGrid);
+    var params = "size="+ Size + "&level="+ Level;
+    console.log("Making Request for " + params);
+    MakeRequest("GET", "server.php", params, retrieveGrid);
 }
 
 // Calls out to the server using the provided arguments
@@ -648,7 +648,6 @@ function MakeJSONRequest(method, phpFile, jsonObj, callback) {
 }
 
 
-
 function retrieveGrid(){
     // Only continue if the response was finished, and returned code 200 for OK
     if (httpRequest.readyState === XMLHttpRequest.DONE) {
@@ -663,9 +662,6 @@ function retrieveGrid(){
         }
     }
 }
-
-
-
 
 function serverReply(){
     // Only continue if the response was finished, and returned code 200 for OK
