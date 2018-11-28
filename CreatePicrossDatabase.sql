@@ -13,10 +13,12 @@
 
 
 -- Dumping database structure for picross
+DROP DATABASE IF EXISTS `picross`;
 CREATE DATABASE IF NOT EXISTS `picross` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `picross`;
 
 -- Dumping structure for table picross.game
+DROP TABLE IF EXISTS `game`;
 CREATE TABLE IF NOT EXISTS `game` (
   `Key` int(11) NOT NULL AUTO_INCREMENT,
   `PlayerKey` int(11) NOT NULL DEFAULT '0',
@@ -28,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `game` (
 
 -- Data exporting was unselected.
 -- Dumping structure for table picross.levels
+DROP TABLE IF EXISTS `levels`;
 CREATE TABLE IF NOT EXISTS `levels` (
   `Key` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `LevelNumber` int(11) NOT NULL,
@@ -38,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `levels` (
 
 -- Data exporting was unselected.
 -- Dumping structure for table picross.players
+DROP TABLE IF EXISTS `players`;
 CREATE TABLE IF NOT EXISTS `players` (
   `Key` int(11) NOT NULL AUTO_INCREMENT,
   `Username` varchar(100) NOT NULL DEFAULT '0',
@@ -47,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `Age` int(11) NOT NULL DEFAULT '0',
   `Gender` varchar(50) NOT NULL DEFAULT '0',
   `Location` varchar(500) NOT NULL DEFAULT '0',
-  `icon` varchar(200) NOT NULL DEFAULT '0',
+  `Icon` varchar(500) NOT NULL DEFAULT '0',
   PRIMARY KEY (`Key`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
