@@ -609,45 +609,6 @@ function GetGrid(Size, Level) {
     MakeRequest("GET", "server.php", params, retrieveGrid);
 }
 
-// Calls out to the server using the provided arguments
-function MakeRequest(method, phpFile, sendData, callback) {
-    httpRequest = new XMLHttpRequest(); // create the object
-    if (!httpRequest) { // check if the object was properly created
-      // issues with the browser, example: old browser
-      alert('Cannot create an XMLHTTP instance');
-      return false;
-    }
-    // Assign the function to call when the response comes back
-    httpRequest.onreadystatechange = callback; 
-    // Open the request as a POST command to server.php
-    httpRequest.open(method, phpFile);
-    // Set the content type
-    httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    // Stringify the data to sent over to the server.
-    httpRequest.send(sendData);
-}
-
-
-// Calls out to the server using the provided arguments
-function MakeJSONRequest(method, phpFile, jsonObj, callback) {
-    httpRequest = new XMLHttpRequest(); // create the object
-    if (!httpRequest) { // check if the object was properly created
-      // issues with the browser, example: old browser
-      alert('Cannot create an XMLHTTP instance');
-      return false;
-    }
-    // Assign the function to call when the response comes back
-    httpRequest.onreadystatechange = callback; 
-    // Open the request as a POST command to server.php
-    httpRequest.open(method, phpFile);
-    // Set the content type
-    httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    // Stringify the data to sent over to the server.
-    var sendString = "json="+JSON.stringify(jsonObj);
-    httpRequest.send(sendString);
-}
-
-
 function retrieveGrid(){
     // Only continue if the response was finished, and returned code 200 for OK
     if (httpRequest.readyState === XMLHttpRequest.DONE) {
