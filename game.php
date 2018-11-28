@@ -62,8 +62,8 @@ if( $sqlConn->GetNumRows() > 0){
 	<body class="bgc_background">
 		<div id="TopContainer" class="container-fluid rounded">
 			<div id="TopRow" class="row align-items-center">
-				<div class="col-lg-2"> </div>
-				<div id="TitleDiv" class="col-lg-8 bgc_foreground fgc_lightblue rounded pl-0 pr-0 ">	
+				<div class="col-lg-1"> </div>
+				<div id="TitleDiv" class="col-10 bgc_foreground fgc_lightblue rounded pl-0 pr-0 ">	
 					<div class="container-fluid bgc_primary4 pb-4 rounded">						
 						<div class="row">
 							<div class="col-3"> </div>
@@ -78,14 +78,16 @@ if( $sqlConn->GetNumRows() > 0){
 								<div class="container">
 									<div class="row">
 										<div class="col-8"></div>
-										<div class="col-4  bgc_primary1">
+										<div class="col-4 bgc_primary1">
 											<center>
 												<b><?php echo $_SESSION['username']; ?></b> 
 											</center>
-											<img style="height: 80px; width: 80px;" src="<?php echo $icon; ?>">
+											<img style="height: 65px; width: 65px;" src="<?php echo $icon; ?>">
 											<form enctype="multipart/form-data" id="logoutForm" action="logout.php" method="post">
 												<input type="hidden" name="logout" value="true">
-												<button onclick="Logout()" type="button" class="btn btn-success">Logout</button>
+												<a href="#" value="" onclick="Logout()" class="text-danger">
+													Logout
+												</a>
 											</form>
 
 										</div>
@@ -103,10 +105,10 @@ if( $sqlConn->GetNumRows() > 0){
 										<div class="collapse navbar-collapse" id="navbarNav">
 											<ul class="navbar-nav">
 										  		<li class="nav-item">
-										    		<a class="nav-link" onclick="$('#PreGame_Selections').slideToggle(500);" href="#"> Play Picross </a>
+										    		<a class="nav-link" onclick="$('#GameInfo').slideUp(500);$('#PreGame_Selections').slideToggle(500);" href="#"> Play Picross </a>
 										  		</li>
 										  		<li class="nav-item">
-										    		<a class="nav-link" onclick="$('#GameInfo').slideToggle(500);" href="#">How to Play</a>
+										    		<a class="nav-link" onclick="$('#PreGame_Selections').slideUp(500);$('#GameInfo').slideToggle(500);" href="#">How to Play</a>
 										  		</li>
 										  		<li class="nav-item">
 										    		<a class="nav-link" onclick="$('#DevInfo').slideToggle(500);" href="#">About Us</a>
@@ -226,7 +228,7 @@ if( $sqlConn->GetNumRows() > 0){
 
 				</div> 
 				<!-- End of TitleDiv --> 
-				<div class="col-lg-2"> </div>
+				<div class="col-lg-1"> </div>
 			</div> 
 			<!-- End of row div -->
 		</div>
