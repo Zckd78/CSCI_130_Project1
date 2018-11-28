@@ -280,7 +280,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 										<h3 class="fgc_black"> Login</h3>
 										<div class="form-group">
 										    <label for="InputUsername">UserName</label>
-										    <input required="true" type="text" class="form-control" id="Log_UserName" name="Log_UserName" placeholder="UserName">
+										    <input required="true" type="text" class="form-control" id="Log_UserName" name="Log_UserName" placeholder="UserName" value="<?php if (empty($usernameError)) { echo $username; } ?>">
 										    <span class="text-danger"> <?php echo $usernameError; ?> </span>
 										  </div>
 										  <div class="form-group">
