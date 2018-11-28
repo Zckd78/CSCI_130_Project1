@@ -157,3 +157,9 @@ function MakeJSONRequest(method, phpFile, jsonObj, callback) {
     httpRequest.send(sendString);
 }
 
+
+function Logout(){
+
+    document.getElementById("logoutForm").submit();
+
+}

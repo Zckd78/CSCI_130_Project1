@@ -1,3 +1,47 @@
+<?php 
+	
+require_once 'Database.php';
+
+// Initialize the session
+session_start();
+// Redirect to login page if session is not set
+if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
+  header("location: index.php");
+  exit;
+}
+
+// Local vars
+$username = $_SESSION['username'];
+$firstname = "";
+$icon = "";
+
+
+// Create a Database Object
+$sqlConn = new SQLConnector();
+
+// Execute the Query
+$sqlConn->Execute("SELECT username, firstname, icon FROM players WHERE username = '$username' LIMIT 1");
+
+$results = $sqlConn->GetResults();
+
+// Proceed when rows > 0
+if( $sqlConn->GetNumRows() > 0){
+	
+	// Get the first row
+	$result = $sqlConn->FetchRow();
+
+	// Set vars
+	$firstname = $result['firstname'];
+	$icon = $result['icon'];
+
+} else {
+	echo "Could not find rows!";
+}
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <style>
@@ -20,12 +64,35 @@
 			<div id="TopRow" class="row align-items-center">
 				<div class="col-lg-2"> </div>
 				<div id="TitleDiv" class="col-lg-8 bgc_foreground fgc_lightblue rounded pl-0 pr-0 ">	
-					<div class="container-fluid bgc_primary4 pb-4 rounded">
-						<div class="col-12"> 
-							<center>
-								<h1> Team 20's Picross Game </h1> 
-								<h3> written by David Yates & Zachary Scott </h3>
-							</center>
+					<div class="container-fluid bgc_primary4 pb-4 rounded">						
+						<div class="row">
+							<div class="col-3"> </div>
+							<div class="col-6"> 
+								<center>
+									<h1> Team 20's Picross Game </h1> 
+									<h3> written by David Yates & Zachary Scott </h3>
+								</center>
+							</div>
+							<div class="col-3">
+								<!-- User Area -->
+								<div class="container">
+									<div class="row">
+										<div class="col-8"></div>
+										<div class="col-4  bgc_primary1">
+											<center>
+												<b><?php echo $_SESSION['username']; ?></b> 
+											</center>
+											<img style="height: 80px; width: 80px;" src="<?php echo $icon; ?>">
+											<form enctype="multipart/form-data" id="logoutForm" action="logout.php" method="post">
+												<input type="hidden" name="logout" value="true">
+												<button onclick="Logout()" type="button" class="btn btn-success">Logout</button>
+											</form>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
 						</div>
 						
 						<!-- Navigation Container -->
