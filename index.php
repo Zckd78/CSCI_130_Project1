@@ -68,7 +68,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			    $_SESSION['username'] = $username;   
 
 			    // Forward the Browser to the game page   
-			    header("location: game.html");
+			    header("location: game.php");
 
 			    CloseConnection();
 		    } else {
@@ -135,6 +135,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	    // Name the Users Icon after them
 	    $userIcon = $username . "_Icon_" . $file_name;
 
+	    // Append the uploads folder
+	    $userIcon = "uploads/" . $userIcon;
+
 	    // Prepare a insert statement
         $sql = "INSERT INTO players (Username, Password, FirstName, LastName, Age, Gender, Location, icon) VALUES ('$username', '$password', '$firstname', '$lastname', $age, '$gender', '$location', '$userIcon');" ;
         
@@ -159,7 +162,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	    $_SESSION['username'] = $username;   
 
 	    // Forward the Browser to the game page   
-	    header("location: game.html");
+	    header("location: game.php");
 
 	    CloseConnection();
 	}  // End Registration Handler

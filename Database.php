@@ -27,14 +27,20 @@ class SQLConnector
         }
     }
 
+    private function CloseConnection(){
+        $this->sqlConnection->close();
+    }
+
     // Contructor to Connect to the Database
     function __construct() {
         $this->Connect();
     }
 
-    private function CloseConnection(){
-        $this->sqlConnection->close();
+    // Destructor
+     function __destruct() {
+        $this->CloseConnection();
     }
+
 
     // Executes the query, and stores the results in the class
     public function Execute($query){
@@ -45,6 +51,10 @@ class SQLConnector
         } else {
             $this->queryExecuted = true;
         }
+    }
+
+    public function GetResults(){
+        return $this->queryResults;
     }
 
     public function GetNumRows(){
@@ -80,6 +90,7 @@ class SQLConnector
         }
 
     }
+
 
 } // End of Class SQLConnector
 
