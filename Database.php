@@ -36,19 +36,7 @@ class SQLConnector
         $this->sqlConnection->close();
     }
 
-    // Return True if successful, else false
-    public function RunSingleQuery($query){
-        $result = $this->sqlConnection->query($query);
-        return $result;
-    }
-
-    public function RunMultiQuery($query){
-        $result = $this->sqlConnection->multi_query($query);
-        return $result;
-    }
-
-
-    //
+    // Executes the query, and stores the results in the class
     public function Execute($query){
         // Run the Query
         $this->queryResults = $this->sqlConnection->query($query);
@@ -59,39 +47,37 @@ class SQLConnector
         }
     }
 
-
     public function GetNumRows(){
         return $this->queryResults->num_rows;
     }
 
     // Returns a single row of the results
     public function FetchRow(){
+        // If we have at least one row
         if($this->queryResults->num_rows > 0){
+            // Seek the data
             $this->queryResults->data_seek(0);
+            // Fetch the object
             return $this->queryResults->fetch_assoc();
         }
     }
 
 
     // Returns the rows
-    public function ReturnQueryRows($query){
-
-        // Run the Query
-        $this->queryResults = $this->sqlConnection->query($query);
-        if(!$this->queryResults){
-            die("Error in query!");
-        };
-
-        // Create an array to store the results
-        $rows = Array($result->num_rows);
-        $i = 0;
-        while ($row = $res->fetch_assoc()) {
-            $rows[$i] = $row;
-            $i = $i + 1;
+    public function FetchAllRows(){
+        // If we have at least one row
+        if($this->queryResults->num_rows > 0){
+            
+            $rows = array($this->queryResults->num_rows);
+            // Seek the data
+            $this->queryResults->data_seek(0);
+            $i = 0;
+            while($row = $this->queryResults->fetch_assoc() ){
+                $rows[$i] = $row;
+                $i++;
+            }
+            return $rows;
         }
-
-        // Return the array
-        return $rows;
 
     }
 
