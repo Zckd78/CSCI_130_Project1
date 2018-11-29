@@ -83,7 +83,7 @@ function ProcessRegistration(){
 		var regFormInput = document.createElement("input");
 		regFormInput.type = "hidden";
 		regFormInput.name = "RegistrationSubmit";
-		document.getElementById("Reg_form").appendChild(regFormInput);
+		document.getElementById("Reg_Form").appendChild(regFormInput);
 
 		// Submit the form
 		document.getElementById("Reg_Form").submit();

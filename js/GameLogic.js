@@ -599,7 +599,7 @@ function SendGrid(Name, Size){
     };
     
     console.log("Making Request for " + Name);
-    MakeRequest("POST", "server.php", "add=1&json="+JSON.stringify(jsonData) , serverReply);
+    MakeRequest("POST", "GameConnector.php", "add=1&json="+JSON.stringify(jsonData) , serverReply);
 }
 
 

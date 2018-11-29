@@ -78,7 +78,7 @@ if( $sqlConn->GetNumRows() > 0){
 								<div class="container">
 									<div class="row">
 										<div class="col-8"></div>
-										<div class="col-4 bgc_primary1">
+										<div class="col-4 bgc_primary1 rounded shadow-lg">
 											<center>
 												<b><?php echo $_SESSION['username']; ?></b> 
 											</center>

@@ -1,5 +1,9 @@
 <?php
 
+
+// Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+
 	// Check if we're uploading a random level
 	if(isset($_POST["add"])) {
 
@@ -35,6 +39,18 @@
 		}
 
 	} 
+}
 
+
+// Processing requests for data
+if($_SERVER["REQUEST_METHOD"] == "GET"){
+
+	// Check if we're uploading a random level
+	if(isset($_POST["level"])) {
+
+		
+
+
+}
 
 ?>

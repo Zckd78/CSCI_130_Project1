@@ -61,11 +61,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		    // Get the first row
 		    $result = $sqlConn->FetchRow();
 
-		    if($result['password'] == $password){
+		    echo $result['password'] . "<br>";
+		    echo password_hash($password, PASSWORD_DEFAULT);
+		    if(password_verify($password, $result['password'])){
 
 		    	// Start the session as their Username
 			    session_start();
-			    $_SESSION['username'] = $username;   
+			    $_SESSION['username'] = $username;
 
 			    // Forward the Browser to the game page   
 			    header("location: game.php");
@@ -127,44 +129,61 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	    }
 
 	    // Check if Icon is empty
-	    if(isset($_POST['Reg_Icon'])){
+	    if(isset($_FILES['Reg_Icon'])){
 	        $file_name = $_FILES['Reg_Icon']['name'];
 			$tmp_dir = $_FILES['Reg_Icon']['tmp_name'];
-	    }		
+	    } else {
+	    	die(" Upload of file failed! ");
+	    }	
 
-	    // Name the Users Icon after them
-	    $userIcon = $username . "_Icon_" . $file_name;
 
-	    // Append the uploads folder
-	    $userIcon = "uploads/" . $userIcon;
+	    // Check if the username exists
+	    $sqlConn = new SQLConnector();
 
-	    // Prepare a insert statement
-        $sql = "INSERT INTO players (Username, Password, FirstName, LastName, Age, Gender, Location, icon) VALUES ('$username', '$password', '$firstname', '$lastname', $age, '$gender', '$location', '$userIcon');" ;
-        
-        // Run the query
-        if(RunSingleQuery($sql)){
-		
-        	// User has registered!
+	    // Execute the Query
+	    $sqlConn->Execute("SELECT username FROM players WHERE username = '$username' LIMIT 1");
+
+	    if( $sqlConn->GetNumRows() > 0){
+	    	// Username exists 
+	    	$usernameError = "User already exists!";
+	    } else {
+
+		    // Name the Users Icon after them
+		    $userIcon = $username . "_Icon_" . $file_name;
+
+		    // Append the uploads folder
+		    $userIcon = "uploads/" . $userIcon;
+
+		    // Hash the password
+		    $password = password_hash($password, PASSWORD_DEFAULT);
+
+		    // Prepare a insert statement
+	        $sql = "INSERT INTO players (Username, Password, FirstName, LastName, Age, Gender, Location, icon) VALUES ('$username', '$password', '$firstname', '$lastname', $age, '$gender', '$location', '$userIcon');" ;
+	        
+	        // Get the connector
+	        $sqlConn = new SQLConnector();
+
+		    // Execute the Query
+		    $sqlConn->Execute($sql);
+			
+	    	// User has registered!
 		    //set permissible file types
 		    if(preg_match('/(gif|jpe?g|png)$/i', $file_name))
 		    {
-		        move_uploaded_file($tmp_dir, $target . $userIcon);
+		        move_uploaded_file($tmp_dir, $userIcon);
 		    } 
 
-        } else {
-            echo "Oops! Something went wrong. Please try again later.";
-        }
+			echo "Registration Completed!";
 
-		echo "Registration Completed!";
+			// Start the session as their Username
+		    session_start();
+		    $_SESSION['username'] = $username;   
 
-		// Start the session as their Username
-	    session_start();
-	    $_SESSION['username'] = $username;   
+		    // Forward the Browser to the game page   
+		    header("location: game.php");
 
-	    // Forward the Browser to the game page   
-	    header("location: game.php");
-
-	    CloseConnection();
+		    CloseConnection();
+		}
 	}  // End Registration Handler
 
 }// End POST Method
@@ -197,7 +216,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 						<div class="col-12"> 
 							<center>
 								<h1> Team 20's Picross Game </h1> 
-								<h3> written by David Yates & Zachary Scott </h3>
+								<h3> written by David Yates & Zachary Scott </h3>					
 							</center>
 						</div>					
 
@@ -263,8 +282,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 											<input required="true" type="text" class="form-control" id="Reg_Location" name="Reg_Location"placeholder="Location">
 										</div>
 										<div class="form-group">
-											<label for="Reg_Location">Icon</label>
-											<input required="true" type="file" class="form-control-file" name="Reg_Icon" placeholder="Location">
+											<label for="Reg_Icon">Icon</label>
+											<input required="true" type="file" class="form-control-file" id="Reg_Icon" name="Reg_Icon">
 										</div>
 									  	<button onclick="ProcessRegistration();" type="button" class="btn btn-success">Register</button>
 									</form>
@@ -280,16 +299,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 							<div class="col-md-5 ml-5 p-3"> 
 								<div class="jumbotron">
 									<form enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" id="Log_Form">
+										<span class="text-danger"> <?php echo $usernameError; ?> </span>
+									    <span class="text-danger"> <?php echo $passwordError; ?> </span>
 										<h3 class="fgc_black"> Login</h3>
 										<div class="form-group">
 										    <label for="InputUsername">UserName</label>
 										    <input required="true" type="text" class="form-control" id="Log_UserName" name="Log_UserName" placeholder="UserName" value="<?php if (empty($usernameError)) { echo $username; } ?>">
-										    <span class="text-danger"> <?php echo $usernameError; ?> </span>
 										  </div>
 										  <div class="form-group">
 										    <label for="InputPassword">Password</label>
 										    <input required="true" type="password" class="form-control" id="Log_PassWord" name="Log_PassWord" placeholder="Password">
-										    <span class="text-danger"> <?php echo $passwordError; ?> </span>
 										  </div>
 										  <button onclick="ProcessLogin()" type="button" class="btn btn-success">Login</button>
 										  	<button onclick="ToggleLoginRegister()" type="button" class="btn btn-primary">Register</button>
