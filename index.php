@@ -61,8 +61,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		    // Get the first row
 		    $result = $sqlConn->FetchRow();
 
-		    echo $result['password'] . "<br>";
-		    echo password_hash($password, PASSWORD_DEFAULT);
 		    if(password_verify($password, $result['password'])){
 
 		    	// Start the session as their Username
