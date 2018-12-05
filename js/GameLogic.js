@@ -26,11 +26,9 @@ var domLevel = undefined;
 // 1 = Time Attack
 var gameMode = undefined;
 
-
 // Used for the suggestions
 var suggestedCorrect = false;
 var suggestedWrong = false;
-
 
 // Used for the timer
 var time = 0;
@@ -168,33 +166,32 @@ function startGame(){
 
     // Decide here how to proceed.
     
+    console.log("Game mode: " + gameMode);
 
+    // If arcade, use predefined levels
+    if (gameMode == 0){
+        GetGrid(xMaximum, gameLevel);
+    }
+    else {
+        // ZS - Create the 2D array of Pixel objects before we create the table items
+        generateGrid();
 
+        // Pass the args to generateTable
+        generateTable();
 
-    
+        // Test Sending the Grid to the server to save.
+        // SendGrid(xMaximum + "x" + yMaximum + "_Level_" + gameLevel,xMaximum);
 
-    // ZS - Create the 2D array of Pixel objects before we create the table items
-    generateGrid();
+        // Hide the game info section
+        $("#GameInfo").slideUp(250);
 
-    // Pass the args to generateTable
-    generateTable();
+        // Reveal the Game board, and hide the configuration section
+        // ZS - This is an example of jQuery
+        $("#GameContainer").slideDown();
+        $("#PreGame_Selections").slideUp(250);
 
-    // Test Sending the Grid to the server to save.
-    SendGrid(xMaximum + "x" + yMaximum + "_Level_" + gameLevel,xMaximum);
-
-    // Testing Level Saving
-    gameLevel++;
-
-    // Hide the game info section
-    $("#GameInfo").slideUp(250);
-
-    // Reveal the Game board, and hide the configuration section
-    // ZS - This is an example of jQuery
-    $("#GameContainer").slideDown();
-    $("#PreGame_Selections").slideUp(250);
-
-
-    startTimer();
+        startTimer();
+    }
 }
 
 
@@ -598,27 +595,43 @@ function SendGrid(Name, Size){
         "Grid" : PixelArray
     };
     
-    console.log("Making Request for " + Name);
+    console.log("SendGrid() : Sending the following Grid: " + Name);
     MakeRequest("POST", "GameConnector.php", "add=1&json="+JSON.stringify(jsonData) , serverReply);
 }
 
 
 function GetGrid(Size, Level) {
-    var params = "size="+ Size + "&level="+ Level;
-    console.log("Making Request for " + params);
-    MakeRequest("GET", "server.php", params, retrieveGrid);
+    var params = "?size="+ Size + "&level="+ Level;
+    console.log("GetGrid() : Making Request for " + params);
+    MakeRequest("GET", "GameConnector.php" + params, null, retrieveGrid);
 }
+
 
 function retrieveGrid(){
     // Only continue if the response was finished, and returned code 200 for OK
     if (httpRequest.readyState === XMLHttpRequest.DONE) {
         if (httpRequest.status === 200) {      
             
-            console.log(httpRequest.responseText);
-
             var responseObject = JSON.parse(httpRequest.responseText);
+            
             // Set the HTML to this response 
             PixelArray = responseObject.Grid;
+
+            console.log(responseObject.Grid);
+
+            // Pass the args to generateTable
+            generateTable();
+
+            
+            // Hide the game info section
+            $("#GameInfo").slideUp(250);
+
+            // Reveal the Game board, and hide the configuration section
+            // ZS - This is an example of jQuery
+            $("#GameContainer").slideDown();
+            $("#PreGame_Selections").slideUp(250);
+
+            startTimer();
             
         }
     }

@@ -1,5 +1,6 @@
 <?php
 
+require_once 'Database.php';
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -29,6 +30,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			];
 
 			echo json_encode($object);
+			exit();
 		} else {
 			// Create a generic object similar to JSON
 			$object = (object) [
@@ -36,6 +38,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			];
 			
 			echo json_encode($object);
+			exit();
 		}
 
 	} 
@@ -45,10 +48,36 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 // Processing requests for data
 if($_SERVER["REQUEST_METHOD"] == "GET"){
 
-	// Check if we're uploading a random level
-	if(isset($_POST["level"])) {
-
+	// Make sure we've supplied the level and size
+	if(isset($_GET["level"]) && isset($_GET["size"])) {
 		
+
+		// Get the level and size
+		$level = $_GET["level"];
+		$size = $_GET["size"];
+
+
+		// Create a Database Object
+		$sqlConn = new SQLConnector();
+
+		// Execute the Query
+		$sqlConn->Execute("select leveldata from levels where LevelNumber = $level and GridSize = $size");
+
+		$results = $sqlConn->GetResults();
+
+		// Proceed when rows > 0
+		if( $sqlConn->GetNumRows() > 0){
+
+			// Get the first row
+			$result = $sqlConn->FetchRow();
+
+			// Decode the JSON string, then reencode it for transfer back to page
+			$jObj = json_decode($result['leveldata']);
+			echo json_encode($jObj);
+			exit();
+		}
+
+	}
 
 
 }
