@@ -28,7 +28,7 @@ $results = $sqlConn->GetResults();
 if( $sqlConn->GetNumRows() > 0){
 	
 	// Get the first row
-	$result = $sqlConn->FetchRow();
+	$result = $sqlConn->FetchRow(0);
 
 	// Set vars
 	$firstname = $result['firstname'];
@@ -77,19 +77,18 @@ if( $sqlConn->GetNumRows() > 0){
 								<!-- User Area -->
 								<div class="container">
 									<div class="row">
-										<div class="col-8"></div>
-										<div class="col-4 bgc_primary1 rounded shadow-lg">
+										<div class="col-8 col-md-6"></div>
+										<div class="col-4 col-md-6 bgc_primary1 rounded shadow-lg">
 											<center>
 												<b><?php echo $_SESSION['username']; ?></b> 
+												<img style="height: 65px; width: 65px;" src="<?php echo $icon; ?>">
+												<form enctype="multipart/form-data" id="logoutForm" action="logout.php" method="post">
+													<input type="hidden" name="logout" value="true">
+													<a href="#" value="" onclick="Logout()" class="text-danger">
+														Logout
+													</a>
+												</form>											
 											</center>
-											<img style="height: 65px; width: 65px;" src="<?php echo $icon; ?>">
-											<form enctype="multipart/form-data" id="logoutForm" action="logout.php" method="post">
-												<input type="hidden" name="logout" value="true">
-												<a href="#" value="" onclick="Logout()" class="text-danger">
-													Logout
-												</a>
-											</form>
-
 										</div>
 
 									</div>
@@ -105,13 +104,16 @@ if( $sqlConn->GetNumRows() > 0){
 										<div class="collapse navbar-collapse" id="navbarNav">
 											<ul class="navbar-nav">
 										  		<li class="nav-item">
-										    		<a class="nav-link" onclick="$('#GameInfo').slideUp(500);$('#PreGame_Selections').slideToggle(500);" href="#"> Play Picross </a>
+										    		<a class="nav-link" onclick="GameClick()" href="#"> Play Picross </a>
 										  		</li>
 										  		<li class="nav-item">
-										    		<a class="nav-link" onclick="$('#PreGame_Selections').slideUp(500);$('#GameInfo').slideToggle(500);" href="#">How to Play</a>
+										    		<a class="nav-link" onclick="HowToClick()" href="#">How to Play</a>
 										  		</li>
 										  		<li class="nav-item">
-										    		<a class="nav-link" onclick="$('#DevInfo').slideToggle(500);" href="#">About Us</a>
+										    		<a class="nav-link" onclick="AboutClick()" href="#">About Us</a>
+										  		</li>
+										  		<li class="nav-item">
+										    		<a class="nav-link" onclick="RequestLeaderBoard()" href="#">Leaderboard</a>
 										  		</li>
 											</ul>
 										</div>
@@ -215,7 +217,7 @@ if( $sqlConn->GetNumRows() > 0){
 								<p>
 									Nonograms, also known as Picross or Griddlers, are picture logic puzzles in which cells in a grid must be colored or left blank according to numbers at the side of the grid to reveal a hidden picture. 
 									<br> <br> In this puzzle type, the numbers are a form of discrete tomography that measures how many unbroken lines of filled-in squares there are in any given row or column. For example, a clue of "4 8 3" would mean there are sets of four, eight, and three filled squares, in that order, with at least one blank square between successive groups. 
-									<br> <br> In this version, you can select the color of the unmarked grid blocks, and the color of correctly chosen blocks. The color of incorrect blocks is always Red.
+									<br> <br> In this version, you can select the color of the unmarked grid blocks (Grid Color), and the color of correctly chosen blocks (Pixel Color). The color of incorrect blocks is always Red.
 								</p>
 							</div>
 							<div class="col-md-7 justify-content-center">
@@ -225,6 +227,64 @@ if( $sqlConn->GetNumRows() > 0){
 						</div>
 					</div>
 					<!-- End of Game Information section -->
+
+
+					<!-- Leaderboard Section -->
+					<div id="Leaderboard" class="container hidden justify-content-center pt-3">
+						<!-- Selecting the size and order -->
+						<div class="row">
+							<div class="col-1"></div>
+							<div class="col-2 col-md-2"> 
+								<div class="form-group"> 
+									<label> Grid size:  </label> <br>
+									<input class="btn btn-dark" id="LeadBtnsize7" type="button" value="7x7" onclick="ChangeLeaderBoardList(7);">
+									<input class="btn btn-secondary" id="LeadBtnsize13" type="button" value="13x13" onclick="ChangeLeaderBoardList(13)">
+								</div>									
+							</div>
+							<div class="col-3 col-md-3"> 
+								<div class="form-group"> 
+									<label> Order of Results:</label> <br>
+									<input class="btn btn-dark" id="LeadBtnscore" type="button" value="By Score" onclick="ChangeLeaderBoardOrder('score');">
+									<input class="btn btn-secondary" id="LeadBtntime" type="button" value="By Time" onclick="ChangeLeaderBoardOrder('duration')">
+								</div>									
+							</div>
+							<div class="col-3 col-md-3"> 
+								<div class="form-group"> 
+									<label> Order Direction:  </label> <br>
+									<input class="btn btn-dark" id="ascLeadBtn" type="button" value="Ascending" onclick="ChangeLeaderBoardDirection('asc');">
+									<input class="btn btn-secondary" id="descLeadBtn" type="button" value="Decending" onclick="ChangeLeaderBoardDirection('desc')">
+								</div>									
+							</div>
+							<div class="col-1 col-md-1"> 
+								<br>								
+								<div class="form-group"> 
+									<input class="btn btn-info" id="ascLeadBtn" type="button" value="Refresh" onclick="RequestLeaderBoard()">									
+								</div>									
+							</div>
+						</div>
+						<!-- The Leaderboard Table -->
+						<div class="row pt-4">
+							<div class="col-1"></div>
+							<div class="col-10 "> 
+								<table class="table table-striped" id="LeaderTable">
+									<thead class="thead-light" >
+										<tr> 
+											<th scope="col"> Level # </th>
+											<th scope="col"> Username </th>
+											<th scope="col"> Duration </th>
+											<th scope="col"> Score </th>
+										</tr>
+									</thead>
+									<tbody id="LeaderTableBody">
+										
+									</tbody>
+								</table>							
+							</div>
+							<div class="col-1"></div>
+						</div>
+
+					</div>
+					<!-- End of Leaderboard section -->
 
 				</div> 
 				<!-- End of TitleDiv --> 

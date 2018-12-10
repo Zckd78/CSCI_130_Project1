@@ -48,14 +48,66 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 // Processing requests for data
 if($_SERVER["REQUEST_METHOD"] == "GET"){
 
-	// Make sure we've supplied the level and size
+
+	// Handle Requests for the leaderboard
+	// Make sure we've supplied the params
+	if(isset($_GET["getLeaderboard"]) && isset($_GET["size"]) && isset($_GET["order"]) && isset($_GET["dir"])) {
+		
+		$orderVar = $_GET["order"];
+		$gridSize = $_GET["size"];
+		$dir = $_GET["dir"];
+
+		// Create a Database Object
+		$sqlConn = new SQLConnector();
+
+		// Execute the Query
+		$sqlConn->Execute("select p.Username, g.Duration, g.Score, l.LevelNumber, l.GridSize from game as g 
+							inner join players as p on p.Key = g.PlayerKey 
+							inner join levels as l on l.Key = g.LevelKey
+							where l.GridSize = $gridSize
+							order by g.$orderVar $dir");
+
+		$results = $sqlConn->GetResults();
+
+		// Proceed when rows > 0
+		$rowCount = $sqlConn->GetNumRows();
+		if( $rowCount > 0){
+
+			$results = (object) [ "Rows" => $rowCount, "Results" => [] ];
+
+			for ($i=0; $i < $rowCount; $i++) { 
+
+				// Get the first row
+				$result = $sqlConn->FetchRow($i);
+
+				// Create a generic object to convert into JSON
+				$object = (object) [
+					"LevelNumber" => $result['LevelNumber'],
+					"GridSize" => $result['GridSize'],
+					"Username" => $result['Username'],
+					"Duration" => $result['Duration'],
+					"Score" => $result['Score']
+				];
+
+				// Add the result row
+				$results->Results[$i] = json_encode($object);
+			}			
+
+			echo json_encode($results);
+			exit();
+		}
+	}
+
+
+
+
+	// Handle Requests for specific levels in the data
+	// Make sure we've supplied the params
 	if(isset($_GET["level"]) && isset($_GET["size"])) {
 		
-
 		// Get the level and size
 		$level = $_GET["level"];
 		$size = $_GET["size"];
-
 
 		// Create a Database Object
 		$sqlConn = new SQLConnector();
@@ -76,7 +128,6 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
 			echo json_encode($jObj);
 			exit();
 		}
-
 	}
 
 

@@ -64,6 +64,19 @@ function Pixel(x,y) {
 }
 	
 
+
+// Leaderboard Vars
+
+// Size requested in the Leaderboard
+var leaderSize = 7;
+
+// Ordering of the Leaderboard
+var leaderOrder = "score"
+
+// Order Direction
+var leaderOrderDir = "asc"
+
+
 /* 
 	------------------------------[FUNCTIONS]------------------------------
 	This area is functions
@@ -577,6 +590,199 @@ function pixelRightClick(pixel){
 
 	// Alert the coordinates.
 	// alert("Coords of this pixel: (" + coords.x + "," + coords.y + ")");
+}
+
+
+/*
+============================================
+    Menu Item Click Handlers functions 
+============================================
+*/
+
+
+function GameClick(){
+    $('#GameInfo').slideUp(500);
+    $('#PreGame_Selections').slideToggle(500);
+    $('#Leaderboard').slideUp(500);
+}
+
+
+function HowToClick(){
+    $('#PreGame_Selections').slideUp(500);
+    $('#Leaderboard').slideUp(500);
+    $('#GameInfo').slideDown(500);
+}
+
+
+function AboutClick(){
+    $('#GameInfo').slideUp(500);
+    $('#PreGame_Selections').slideUp(500);
+    $('#DevInfo').slideDown(500);
+    $('#Leaderboard').slideUp(500);
+}
+
+/*
+============================================
+    Leaderboard functions 
+============================================
+*/
+
+// Used to configure the size of the grid being shown in the leaderboard
+function ChangeLeaderBoardList(size){
+
+    size7 = document.getElementById("LeadBtnsize7");
+    size13 = document.getElementById("LeadBtnsize13");
+
+    if(size == 7 || size == 13){
+
+        // Update the Size Buttons
+        if( size == 7 ){
+            size7.classList.replace("btn-secondary", "btn-dark");
+            size13.classList.replace("btn-dark", "btn-secondary");
+        } else if( size == 13 ){
+            size7.classList.replace("btn-dark", "btn-secondary");
+            size13.classList.replace("btn-secondary", "btn-dark");
+        }
+
+        // Update the global var
+        leaderSize = size;
+    }
+}
+
+function ChangeLeaderBoardOrder(order){
+
+    console.log("Updated Leaderboard Order: " + order);
+
+    orderScore = document.getElementById("LeadBtnscore");
+    orderTime = document.getElementById("LeadBtntime");
+
+    if( order == "score" || order == "duration"){
+
+        if( order == "score"){
+            orderScore.classList.replace("btn-secondary", "btn-dark");
+            orderTime.classList.replace("btn-dark", "btn-secondary");
+        }
+         else if( order == "duration"){
+            orderScore.classList.replace("btn-dark", "btn-secondary");
+            orderTime.classList.replace("btn-secondary", "btn-dark");
+        }
+
+        // Update the global var
+        leaderOrder = order; 
+    }
+
+}
+
+
+function ChangeLeaderBoardDirection(dir){
+
+    console.log("Updated Leaderboard Order Direction: " + dir);
+
+    orderAsc = document.getElementById("ascLeadBtn");
+    orderDesc = document.getElementById("descLeadBtn");
+
+    if( dir == "asc" || dir == "desc"){
+
+        if( dir == "asc"){
+            orderAsc.classList.replace("btn-secondary", "btn-dark");
+            orderDesc.classList.replace("btn-dark", "btn-secondary");
+        }
+         else if( dir == "desc"){
+            orderAsc.classList.replace("btn-dark", "btn-secondary");
+            orderDesc.classList.replace("btn-secondary", "btn-dark");
+        }  
+
+        // Update the global var
+        leaderOrderDir = dir;      
+    }
+
+}
+
+// Called when we open the leaderboard or change the settings
+function RequestLeaderBoard(){
+
+    // Move the tiles around
+    $('#Leaderboard').slideDown(500);
+    $('#GameInfo').slideUp(500);
+    $('#PreGame_Selections').slideUp(500);
+    $('#DevInfo').slideUp(500);
+
+    // Check for valid settings
+    if( 
+        (leaderSize == 7 || leaderSize == 13) && 
+        (leaderOrder == "score" || leaderOrder == "duration" ) &&  
+        (leaderOrderDir == "asc" || leaderOrderDir == "desc") 
+        )
+    {
+        var params = "?getLeaderboard=true&size="+ leaderSize + "&order="+ leaderOrder + "&dir=" + leaderOrderDir;
+        console.log("RequestLeaderBoard() : Making Request for " + params);
+        MakeRequest("GET", "GameConnector.php" + params, null, UpdateLeaderBoard);
+
+    }
+
+}
+
+// Removes the previous leaderboard and updates with what the 
+function UpdateLeaderBoard(){
+
+    // Only continue if the response was finished, and returned code 200 for OK
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+        if (httpRequest.status === 200) {      
+    
+            var responseObject = JSON.parse(httpRequest.responseText);
+            
+            console.log("UpdateLeaderBoard() : Got response from Server!");
+            console.log(responseObject);
+
+            var table = document.getElementById("GameTable");
+            var tBody = document.getElementById("LeaderTableBody");
+            
+            // Clear the last results
+            tBody.innerHTML = "";
+
+            console.log(" Result Rows: " + responseObject['Rows']);
+
+            // Loop through result rows
+            for (var y = 0; y < responseObject.Rows; y++) {
+                
+                // Debugging
+                console.log("Iteration Log: " + y);
+                console.log(" Response Object: " + responseObject.Results[y]);
+                console.log(" Response Object Test: " + responseObject.Results[y].LevelNumber); 
+
+                // Create the Row
+                var tRow = document.createElement("tr");
+                
+                // Get the object from the parsed JSON
+                var resultObj = JSON.parse(responseObject.Results[y]);
+
+                var innerHTML = "" + resultObj.LevelNumber;
+
+                // Level Number
+                var data = document.createElement("td");
+                data.innerHTML = "<td>" + resultObj.LevelNumber + "</td>"; 
+                tRow.appendChild(data);
+
+                // Username
+                var data = document.createElement("td");
+                data.innerHTML += "<td>" + resultObj.Username + "</td>";
+                tRow.appendChild(data);
+
+                // Duration    
+                var data = document.createElement("td");
+                data.innerHTML += "<td>" + resultObj.Duration + "</td>";
+                tRow.appendChild(data);
+
+                // Score
+                var data = document.createElement("td");
+                data.innerHTML += "<td>" + resultObj.Score + "</td>";
+                tRow.appendChild(data);
+
+                // Add the Row to the Body
+                tBody.appendChild(tRow);
+            }
+        }
+    }
 }
 
 

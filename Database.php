@@ -62,11 +62,12 @@ class SQLConnector
     }
 
     // Returns a single row of the results
-    public function FetchRow(){
+    public function FetchRow($rowNum){
         // If we have at least one row
         if($this->queryResults->num_rows > 0){
+
             // Seek the data
-            $this->queryResults->data_seek(0);
+            $this->queryResults->data_seek($rowNum);
             // Fetch the object
             return $this->queryResults->fetch_assoc();
         }
