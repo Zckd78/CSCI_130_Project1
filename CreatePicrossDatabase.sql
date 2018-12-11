@@ -74,13 +74,11 @@ CREATE TABLE IF NOT EXISTS `players` (
   PRIMARY KEY (`Key`)
 ) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
--- Dumping data for table csci130_team20.players: 3 rows
+-- Dumping data for table csci130_team20.players: 4 rows
 DELETE FROM `players`;
 /*!40000 ALTER TABLE `players` DISABLE KEYS */;
 INSERT INTO `players` (`Key`, `Username`, `Password`, `FirstName`, `LastName`, `Age`, `Gender`, `Location`, `Icon`) VALUES
 	(12, 'zckd78', '$2y$10$ohQfWEKYFS/AxNkh.ZU5PeymxzdkY1u2qMIJV61s.5oN6x0AnYSBq', 'Zach', 'Scott', 31, 'M', 'Fresno', 'uploads/zckd78_Icon_Plizkin.jpg'),
-	(13, 'user123', '$2y$10$DlUNQ3DcoBquKjt/QbB89.zwZRC7T7PifroSG.yiheOQq00d5VnQS', '123', '132', 31, 'm', 't', 'uploads/user123_Icon_Cowboy-Bebop.jpg'),
-	(14, 'david123', '$2y$10$HfbSmIPw9Fv4keC/J1EMouHQEGKebeWlZI1NxhcDPgsxKjn67.Lh6', 'David', 'Yates', 999, 'Male', 'Fresburg', 'uploads/david123_Icon_cb1.jpg'),
 	(15, 'csci130', '$2y$10$ExyciDmgR8dQ7sbUntGV8umtllv48uZw/AxzQhHRtoph1oDCX6DdO', 'Hubert', 'Cecotti', 18, 'Male', 'Fresno', 'uploads/csci130_Icon_hubert_cecotti.jpg');
 /*!40000 ALTER TABLE `players` ENABLE KEYS */;
 
