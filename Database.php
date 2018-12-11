@@ -18,7 +18,7 @@ class SQLConnector
     private function Connect(){
         
         // Create the Connection
-        $this->sqlConnection = new mysqli("localhost","root","","picross");
+        $this->sqlConnection = new mysqli("localhost","root","","csci130_team20");
 
         // Check for errors
         if ($this->sqlConnection->connect_errno)
@@ -65,7 +65,6 @@ class SQLConnector
     public function FetchRow($rowNum){
         // If we have at least one row
         if($this->queryResults->num_rows > 0){
-
             // Seek the data
             $this->queryResults->data_seek($rowNum);
             // Fetch the object
