@@ -121,7 +121,7 @@ if($_SERVER["REQUEST_METHOD"] == "GET"){
 		if( $sqlConn->GetNumRows() > 0){
 
 			// Get the first row
-			$result = $sqlConn->FetchRow();
+			$result = $sqlConn->FetchRow(0);
 
 			// Decode the JSON string, then reencode it for transfer back to page
 			$jObj = json_decode($result['leveldata']);

@@ -1,8 +1,5 @@
 <?php
 
-/**
- * 
- */
 class SQLConnector 
 {
     // Our connection to the database
