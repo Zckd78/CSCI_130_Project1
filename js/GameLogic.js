@@ -24,6 +24,8 @@ var domLevel = undefined;
 var combo = 0;
 var arcadeScore = 0;
 
+var timeAttackScore = 0;
+
 // Modes:
 // 0 = Arcade
 // 1 = Time Attack
@@ -178,10 +180,12 @@ function startGame(){
     domElements = document.getElementById("val_elements");
     domErrors = document.getElementById("val_errors");
     domScore = document.getElementById("val_score");
+    domLevel = document.getElementById("val_level");
 
+    // Set the current Level
+    domLevel.innerHTML = gameLevel;
 
     // Decide here how to proceed.
-    
     console.log("Game mode: " + gameMode);
 
     // If arcade, use predefined levels
@@ -192,7 +196,7 @@ function startGame(){
         // ZS - Create the 2D array of Pixel objects before we create the table items
         generateGrid();
 
-        // Pass the args to generateTable
+        // Generate the table based on the 2D Array from generateGrid
         generateTable();
 
         // Test Sending the Grid to the server to save.
@@ -217,10 +221,12 @@ function startGame(){
 ============================================
 */
 //DY - Timer function
-function startTimer() {
-    time = 0;
+function startTimer(starting=0) {
+    time = starting;
+    console.log("Starting Timer");
     clearTimer();    
     timerInt = setInterval(incTimer, 10);
+    console.log("Timer Interval Set");
 }
 function incTimer() { //DY - function for timer
     time += 0.01;
@@ -455,7 +461,9 @@ function pixelLeftClick(pixel){
     		//Mark correct
             pixel.classList.replace(colorGridBackground,colorPixelCorrect);
             // Update the pixel
-            pix.isMarked = true;
+            PixelArray[coords.x][coords.y].isMarked = true;
+            // Debugging
+            console.log(PixelArray[coords.x][coords.y]);
             // Increment turns
             domTurns.innerHTML = ++gameTurns;
             // Decrement elements
@@ -476,6 +484,8 @@ function pixelLeftClick(pixel){
             if (!pixel.classList.contains("pixel_incorrect")) {
                 //DY - Else it's a miss, mark incorrect
                 pixel.classList.add("pixel_incorrect");
+                // Update the pixel
+                PixelArray[coords.x][coords.y].isMarked = true;
                 //DY - increment turns
                 domTurns.innerHTML = ++gameTurns;
                 //DY Increment errors
@@ -497,8 +507,35 @@ function pixelLeftClick(pixel){
     if(hasWon()){
         //If in Time Attack
         if (gameMode == 1) {
-            alert("You solved this puzzle in " + time + " seconds!");
-            clearTimer();
+            // Check if the player has completed 3 levels
+            if( gameLevel == 3){
+                //Victory Screen
+                alert("Congratulations, you have completed Time Attack Mode!\nYour total time is: " +
+                time.toFixed(2));
+            } else {
+                // Store the previous levels time
+            tempTime = time;
+            alert("You solved this puzzle in " + tempTime.toFixed(2) + " seconds! Generating new level...");
+            // Reset the game state
+            gameElements = 0;
+            domElements.innerHTML = gameElements;
+            gameErrors = 0;
+            domErrors.innerHTML = gameErrors;
+            gameTurns = 0;
+            domTurns.innerHTML = gameTurns;
+            gameScore = 0;
+            gameLevel++;
+            domLevel.innerHTML = gameLevel;
+            // Generate a new level
+            generateGrid();
+            // Remove the table elements before adding more
+            var table = document.getElementById("GameTable");
+            table.innerHTML = "";
+            // Draw the new level
+            generateTable();
+            // Start the time again
+            startTimer(tempTime);
+        }            
         }
         
         //Else if before 3 levels completed in Aracde
@@ -515,7 +552,11 @@ function pixelLeftClick(pixel){
                     " \nNow try level " + 
                     //Increment level
                     ++gameLevel + "!");
-                    
+            
+
+            // Set the current Level
+            domLevel.innerHTML = gameLevel;
+
             //Start new game
             startGame();
             domScore.innerHTML = 0;
@@ -801,7 +842,7 @@ function UpdateLeaderBoard(){
             for (var y = 0; y < responseObject.Rows; y++) {
                 
                 // Debugging
-                console.log("Iteration Log: " + y);
+                console.log(" Iteration Log: " + y);
                 console.log(" Response Object: " + responseObject.Results[y]);
                 console.log(" Response Object Test: " + responseObject.Results[y].LevelNumber); 
 

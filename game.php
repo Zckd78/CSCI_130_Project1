@@ -187,6 +187,7 @@ if( $sqlConn->GetNumRows() > 0){
 							<div class="col-1"> </div>
 							<div class="col-3 justify-content-center">
 								<div class="jumbotron p-4">
+									<h1 class="fgc_black"> Level: <span id="val_level"></span> </h1>
 									<ul class="list-group">
 										<!-- Adding spans with ids to tap into for updating during the game -->
 										<li class="list-group-item status" >Timer: <span id="val_timer" class="StatusText">0</span></li>
