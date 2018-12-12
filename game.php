@@ -68,10 +68,12 @@ if( $sqlConn->GetNumRows() > 0){
 						<div class="row">
 							<div class="col-3"> </div>
 							<div class="col-6"> 
-								<center>
-									<h1> Team 20's Picross Game </h1> 
-									<h3> written by David Yates & Zachary Scott </h3>
-								</center>
+								<header>
+									<center>
+										<h1> Team 20's Picross Game </h1> 
+										<h3> written by David Yates & Zachary Scott </h3>					
+									</center>
+								</header>
 							</div>
 							<div class="col-3">
 								<!-- User Area -->
@@ -110,10 +112,10 @@ if( $sqlConn->GetNumRows() > 0){
 										    		<a class="nav-link" onclick="HowToClick()" href="#">How to Play</a>
 										  		</li>
 										  		<li class="nav-item">
-										    		<a class="nav-link" onclick="AboutClick()" href="#">About Us</a>
+										    		<a class="nav-link" onclick="RequestLeaderBoard()" href="#">Leaderboard</a>
 										  		</li>
 										  		<li class="nav-item">
-										    		<a class="nav-link" onclick="RequestLeaderBoard()" href="#">Leaderboard</a>
+										    		<a class="nav-link" onclick="AboutClick()" href="#">About Us</a>
 										  		</li>
 											</ul>
 										</div>
@@ -228,6 +230,43 @@ if( $sqlConn->GetNumRows() > 0){
 					</div>
 					<!-- End of Game Information section -->
 
+
+					<!-- About Us Information -->
+					<div id="DevInfo" class="hidden pt-2">
+						<div class="container justify-content-center">
+							<center>
+								<h1> About Us</h1>
+							</center>
+							<div class="row">
+								<!-- Zack -->
+								<div class="col-md-6">
+									<center>
+										<h3>
+											Zachary Scott
+										</h3>
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ipsum nulla, tincidunt a neque a, euismod suscipit ante. Nullam nec tincidunt magna, eget consequat ligula. Donec consectetur ultricies libero et auctor. Ut quis ipsum bibendum, euismod velit et, dapibus justo. Cras suscipit porttitor lorem, ac blandit tellus volutpat sed. Sed ac blandit nunc, eu maximus quam. Donec accumsan nibh in lectus gravida sagittis. Phasellus eget quam interdum, vehicula lectus id, facilisis lacus. Morbi vitae nisl sed elit pulvinar lobortis id at nulla. Integer eu tempus nisl. Cras condimentum dui eros, et volutpat nibh blandit sit amet. Fusce aliquet efficitur scelerisque. In mollis pulvinar ligula quis egestas. Proin massa est, finibus eu interdum vel, mollis quis neque. Curabitur nec leo diam. Suspendisse vitae porttitor nulla.
+										</p>
+									</center>
+								</div>
+								<!-- END Zack Section -->
+
+								<!-- David -->
+								<div class="col-md-6">
+									<center>
+										<h3>
+											David Yates
+										</h3>
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ipsum nulla, tincidunt a neque a, euismod suscipit ante. Nullam nec tincidunt magna, eget consequat ligula. Donec consectetur ultricies libero et auctor. Ut quis ipsum bibendum, euismod velit et, dapibus justo. Cras suscipit porttitor lorem, ac blandit tellus volutpat sed. Sed ac blandit nunc, eu maximus quam. Donec accumsan nibh in lectus gravida sagittis. Phasellus eget quam interdum, vehicula lectus id, facilisis lacus. Morbi vitae nisl sed elit pulvinar lobortis id at nulla. Integer eu tempus nisl. Cras condimentum dui eros, et volutpat nibh blandit sit amet. Fusce aliquet efficitur scelerisque. In mollis pulvinar ligula quis egestas. Proin massa est, finibus eu interdum vel, mollis quis neque. Curabitur nec leo diam. Suspendisse vitae porttitor nulla.
+										</p>
+									</center>
+								</div>
+								<!-- END David Section -->
+							</div>
+						</div>
+					</div>
+					<!-- End of About Us section -->
 
 					<!-- Leaderboard Section -->
 					<div id="Leaderboard" class="container hidden justify-content-center pt-3">
