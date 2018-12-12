@@ -604,6 +604,7 @@ function GameClick(){
     $('#GameInfo').slideUp(500);
     $('#PreGame_Selections').slideToggle(500);
     $('#Leaderboard').slideUp(500);
+    $('#DevInfo').slideUp(500);
 }
 
 
@@ -611,6 +612,7 @@ function HowToClick(){
     $('#PreGame_Selections').slideUp(500);
     $('#Leaderboard').slideUp(500);
     $('#GameInfo').slideDown(500);
+    $('#DevInfo').slideUp(500);
 }
 
 
