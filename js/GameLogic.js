@@ -21,6 +21,9 @@ var domScore = undefined;
 var gameLevel = 1;
 var domLevel = undefined;
 
+var combo = 0;
+var arcadeScore = 0;
+
 // Modes:
 // 0 = Arcade
 // 1 = Time Attack
@@ -112,7 +115,7 @@ function setGameMode(mode){
     var arcadeBtn = document.getElementById("arcadeBtn");
     var attackBtn = document.getElementById("attackBtn");
 
-    if(mode == 0 || mode == 1) {
+    if(mode == 0 | mode == 1) {
         gameMode = mode;
 
         // Update the Size Buttons
@@ -437,7 +440,7 @@ function addRow( y) {
 	their children through the DOM.
 */
 function pixelLeftClick(pixel){
-	
+	var localScore;
     // First check if pixel is solved or not -- if solved we don't want to touch it
     if (!pixel.classList.contains("pixel_correct"))
     {   
@@ -457,6 +460,17 @@ function pixelLeftClick(pixel){
             domTurns.innerHTML = ++gameTurns;
             // Decrement elements
             domElements.innerHTML = --gameElements;
+            
+            // Score combo counter, goes up by 1 + 10% each correct mark in a row
+            combo = ++combo + (combo *.1);
+            
+            //In correct case, increment score
+            if (gameElements > 0 ) {
+                gameScore += ((100 / gameElements) + combo);
+            }
+            else gameScore += 300;
+            
+            
     	} else if(!pix.isCorrect) {
     		//DY - If already an error, do nothing
             if (!pixel.classList.contains("pixel_incorrect")) {
@@ -466,23 +480,62 @@ function pixelLeftClick(pixel){
                 domTurns.innerHTML = ++gameTurns;
                 //DY Increment errors
                 domErrors.innerHTML = ++gameErrors;
+                
+                //DY reset combo
+                combo = 0;
+                
+                //Decrement score
+                gameScore -= (100 / gameElements * 4);
+                
             }   
     	}
+        //In either case, update UI score.
+        domScore.innerHTML = Math.max(gameScore, 0).toFixed(2);
     }
 
     // Check if we've won the game
     if(hasWon()){
-        alert("You solved this puzzle in " + time + " seconds!");
-        clearTimer();
-    } else {
-        updateScore();
-    }
+        //If in Time Attack
+        if (gameMode == 1) {
+            alert("You solved this puzzle in " + time + " seconds!");
+            clearTimer();
+        }
+        
+        //Else if before 3 levels completed in Aracde
+        else if (gameLevel < 3)
+        {
+            //Add to total arcade score
+            arcadeScore += Math.max(gameScore, 0);
+            
+            //Announce win
+            alert("You solved this puzzle in " + 
+                    time.toFixed(2) + 
+                    " seconds!  300 point clear bonus!\nYour total Arcade Score is: " + 
+                    arcadeScore.toFixed(2) + 
+                    " \nNow try level " + 
+                    //Increment level
+                    ++gameLevel + "!");
+                    
+            //Start new game
+            startGame();
+            domScore.innerHTML = 0;
+        }
+        else
+        {
+            //Victory Screen
+            alert("Congratulations, you have completed Arcade Mode!\nYour total Arcade Score is: " +
+            arcadeScore.toFixed(2));
+            arcadeScore = 0;
+        }
+    } 
 }
 
+/*
 function updateScore(){
     gameScore = (Math.max((gameElements - gameErrors),0) / gameElements).toFixed(2);
     domScore.innerHTML = gameScore;
 }
+*/
 
 
 function hasWon(){
@@ -822,15 +875,23 @@ function retrieveGrid(){
             
             var responseObject = JSON.parse(httpRequest.responseText);
             
-            // Set the Pixel Array equal to the Grid in the response
+            // Set the HTML to this response 
             PixelArray = responseObject.Grid;
 
-            // Debugging
             console.log(responseObject.Grid);
 
             // Pass the args to generateTable
             generateTable();
 
+            for (var y = 0; y < xMaximum; y++)
+            {
+                for (var x = 0; x < xMaximum; x++)
+                {
+                    if (PixelArray[x][y].isCorrect)
+                        domElements.innerHTML = ++gameElements;
+                }
+            }
+            
             // Hide the game info section
             $("#GameInfo").slideUp(250);
 
@@ -839,7 +900,8 @@ function retrieveGrid(){
             $("#GameContainer").slideDown();
             $("#PreGame_Selections").slideUp(250);
 
-            startTimer();            
+            startTimer();
+            
         }
     }
 }
