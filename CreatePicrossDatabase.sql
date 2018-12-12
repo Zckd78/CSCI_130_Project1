@@ -27,14 +27,20 @@ CREATE TABLE IF NOT EXISTS `game` (
   `LevelKey` int(11) NOT NULL DEFAULT '0',
   `Score` int(11) NOT NULL,
   PRIMARY KEY (`Key`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table csci130_team20.game: 2 rows
 DELETE FROM `game`;
 /*!40000 ALTER TABLE `game` DISABLE KEYS */;
 INSERT INTO `game` (`Key`, `PlayerKey`, `Duration`, `Errors`, `LevelKey`, `Score`) VALUES
-	(1, 12, 100, 4, 1, 0),
-	(2, 12, 90, 2, 1, 100);
+	(1, 12, 100, 4, 1, 85),
+	(2, 12, 90, 2, 1, 100),
+	(3, 12, 230, 6, 4, 80),
+	(4, 12, 210, 4, 4, 100),
+	(5, 12, 120, 3, 2, 70),
+	(6, 12, 110, 3, 1, 90),
+	(7, 12, 185, 2, 2, 156),
+	(8, 12, 295, 8, 4, 50);
 /*!40000 ALTER TABLE `game` ENABLE KEYS */;
 
 -- Dumping structure for table csci130_team20.levels
@@ -74,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   PRIMARY KEY (`Key`)
 ) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
--- Dumping data for table csci130_team20.players: 4 rows
+-- Dumping data for table csci130_team20.players: 2 rows
 DELETE FROM `players`;
 /*!40000 ALTER TABLE `players` DISABLE KEYS */;
 INSERT INTO `players` (`Key`, `Username`, `Password`, `FirstName`, `LastName`, `Age`, `Gender`, `Location`, `Icon`) VALUES
