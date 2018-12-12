@@ -212,10 +212,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 				<div id="TitleDiv" class="col-lg-8 bgc_foreground fgc_lightblue rounded pl-0 pr-0 ">	
 					<div class="container-fluid bgc_primary4 pb-4 rounded">
 						<div class="col-12"> 
-							<center>
-								<h1> Team 20's Picross Game </h1> 
-								<h3> written by David Yates & Zachary Scott </h3>					
-							</center>
+							<!-- Title Header -->
+							<header>
+								<center>
+									<h1> Team 20's Picross Game </h1> 
+									<h3> written by David Yates & Zachary Scott </h3>					
+								</center>
+							</header>
 						</div>					
 
 						<!-- Navigation Container -->
@@ -240,90 +243,98 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 						<!-- End of Navigation Row -->
 
 
-					<!-- Register Section -->
-					<div id="Register" class="container bgc_primary1  hidden">
-						<div class="row justify-content-center">
-							<div class="col-md-5 ml-5 p-3"> 
-								<div class="jumbotron">
-									<form enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" id="Reg_Form">
-										<h3 class="fgc_black"> Register </h3>
-										<div class="form-group">
-										    <label for="Reg_UserName">UserName</label>
-										    <input required="true" type="text" class="form-control"  name="Reg_UserName"id="Reg_UserName" placeholder="UserName">
-									  	</div>
-										<div class="form-group">
-											<label for="Reg_InputPassword1">Password</label>
-											<input required="true" type="password" class="form-control" id="Reg_InputPassword1" name="Reg_InputPassword1"placeholder="Password">
-										</div>
-										<div class="form-group">
-											<label for="Reg_InputPassword2">Confirm Password</label>
-											<input required="true" type="password" class="form-control" id="Reg_InputPassword2" name="Reg_InputPassword2"placeholder="Password">
-										</div>
-										<div class="form-group">
-											<label for="Reg_FirstName">First Name</label>
-											<input required="true" type="text" class="form-control" id="Reg_FirstName" name="Reg_FirstName" placeholder="First Name">
+						<!-- Register Section -->
+						<div id="Register" class="container bgc_primary1  hidden">
+							<div class="row justify-content-center">
+								<div class="col-md-5 ml-5 p-3"> 
+									<div class="jumbotron">
+										<form enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" id="Reg_Form">
+											<h3 class="fgc_black"> Register </h3>
+											<div class="form-group">
+											    <label for="Reg_UserName">UserName</label>
+											    <input required="true" type="text" class="form-control"  name="Reg_UserName"id="Reg_UserName" placeholder="UserName">
+										  	</div>
+											<div class="form-group">
+												<label for="Reg_InputPassword1">Password</label>
+												<input required="true" type="password" class="form-control" id="Reg_InputPassword1" name="Reg_InputPassword1"placeholder="Password">
 											</div>
-										<div class="form-group">
-											<label for="Reg_LastName">Last Name</label>
-											<input required="true" type="text" class="form-control" id="Reg_LastName" name="Reg_LastName" placeholder="Last Name">
+											<div class="form-group">
+												<label for="Reg_InputPassword2">Confirm Password</label>
+												<input required="true" type="password" class="form-control" id="Reg_InputPassword2" name="Reg_InputPassword2"placeholder="Password">
 											</div>
-										<div class="form-group">
-											<label for="Reg_Age">Age</label>
-											<input required="true" type="number" class="form-control" id="Reg_Age" name="Reg_Age"placeholder="Age">
-										</div>
-										<div class="form-group">
-											<label for="Reg_Gender">Gender</label>
-											<input required="true" type="text" class="form-control" name="Reg_Gender" id="Reg_Gender" placeholder="Gender">
-										</div>
-										<div class="form-group">
-											<label for="Reg_Location">Location</label>
-											<input required="true" type="text" class="form-control" id="Reg_Location" name="Reg_Location"placeholder="Location">
-										</div>
-										<div class="form-group">
-											<label for="Reg_Icon">Icon</label>
-											<input required="true" type="file" class="form-control-file" id="Reg_Icon" name="Reg_Icon">
-										</div>
-									  	<button onclick="ProcessRegistration();" type="button" class="btn btn-success">Register</button>
-									</form>
-								</div>
-							</div>							
+											<div class="form-group">
+												<label for="Reg_FirstName">First Name</label>
+												<input required="true" type="text" class="form-control" id="Reg_FirstName" name="Reg_FirstName" placeholder="First Name">
+												</div>
+											<div class="form-group">
+												<label for="Reg_LastName">Last Name</label>
+												<input required="true" type="text" class="form-control" id="Reg_LastName" name="Reg_LastName" placeholder="Last Name">
+												</div>
+											<div class="form-group">
+												<label for="Reg_Age">Age</label>
+												<input required="true" type="number" class="form-control" id="Reg_Age" name="Reg_Age"placeholder="Age">
+											</div>
+											<div class="form-group">
+												<label for="Reg_Gender">Gender</label>
+												<input required="true" type="text" class="form-control" name="Reg_Gender" id="Reg_Gender" placeholder="Gender">
+											</div>
+											<div class="form-group">
+												<label for="Reg_Location">Location</label>
+												<input required="true" type="text" class="form-control" id="Reg_Location" name="Reg_Location"placeholder="Location">
+											</div>
+											<div class="form-group">
+												<label for="Reg_Icon">Icon</label>
+												<input required="true" type="file" class="form-control-file" id="Reg_Icon" name="Reg_Icon">
+											</div>
+										  	<button onclick="ProcessRegistration();" type="button" class="btn btn-success">Register</button>
+										</form>
+									</div>
+								</div>							
+							</div>
 						</div>
-					</div>
-					<!-- End of Register Section -->
+						<!-- End of Register Section -->
 
-					<!-- Login Section -->
-					<div id="Login" class="container bgc_primary1">
-						<div class="row justify-content-center">
-							<div class="col-md-5 ml-5 p-3"> 
-								<div class="jumbotron">
-									<form enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" id="Log_Form">
-										<span class="text-danger"> <?php echo $usernameError; ?> </span>
-									    <span class="text-danger"> <?php echo $passwordError; ?> </span>
-										<h3 class="fgc_black"> Login</h3>
-										<div class="form-group">
-										    <label for="InputUsername">UserName</label>
-										    <input required="true" type="text" class="form-control" id="Log_UserName" name="Log_UserName" placeholder="UserName" value="<?php if (empty($usernameError)) { echo $username; } ?>">
-										  </div>
-										  <div class="form-group">
-										    <label for="InputPassword">Password</label>
-										    <input required="true" type="password" class="form-control" id="Log_PassWord" name="Log_PassWord" placeholder="Password">
-										  </div>
-										  <button onclick="ProcessLogin()" type="button" class="btn btn-success">Login</button>
-										  	<button onclick="ToggleLoginRegister()" type="button" class="btn btn-primary">Register</button>
-									</form>
-								</div>
-							</div>							
-						</div>
-					</div>
-					<!-- End of Login Section -->
+						<!-- Login Section -->
+						<div id="Login" class="container bgc_primary1">
+							<div class="row justify-content-center">
+								<div class="col-md-5 ml-5 p-3"> 
+									<div class="jumbotron">
+										<form enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" id="Log_Form">
+											<span class="text-danger"> <?php echo $usernameError; ?> </span>
+										    <span class="text-danger"> <?php echo $passwordError; ?> </span>
+											<h3 class="fgc_black"> Login</h3>
+											<div class="form-group">
+											    <label for="InputUsername">UserName</label>
+											    <input required="true" type="text" class="form-control" id="Log_UserName" name="Log_UserName" placeholder="UserName" value="<?php if (empty($usernameError)) { echo $username; } ?>">
+											  </div>
+											  <div class="form-group">
+											    <label for="InputPassword">Password</label>
+											    <input required="true" type="password" class="form-control" id="Log_PassWord" name="Log_PassWord" placeholder="Password">
+											  </div>
+											  <button onclick="ProcessLogin()" type="button" class="btn btn-success">Login</button>
+											  	<button onclick="ToggleLoginRegister()" type="button" class="btn btn-primary">Register</button>
+										</form>
+									</div>
+								</div>							
+							</div>
+						</div> <!-- End of Login Section -->
 
+						<!-- Begin Footer Section -->
+						<footer>
+							<br>
+							<center>
+								<span> Visit our GitHub! </span>
+								<a href="https://github.com/Zckd78/CSCI_130_Project1">
+								<img src="img/github.png" height="60px" width="60px">
+							</a>
+							</center>
+						</footer>
 
-				</div> 
-				<!-- End of TitleDiv --> 
-				<div class="col-lg-2"> </div>
-			</div> 
-			<!-- End of row div -->
-		</div>
-		<!-- End of Main Container -->
+					</div> 
+					<div class="col-lg-2"> </div>
+					
+				</div>  <!-- End of TitleDiv --> 
+			
+		</div> <!-- End of row div -->
 	</body>
 </html>
