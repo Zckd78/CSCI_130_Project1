@@ -244,10 +244,10 @@ if( $sqlConn->GetNumRows() > 0){
 										<h3>
 											Zachary Scott
 										</h3>
-										<p>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ipsum nulla, tincidunt a neque a, euismod suscipit ante. Nullam nec tincidunt magna, eget consequat ligula. Donec consectetur ultricies libero et auctor. Ut quis ipsum bibendum, euismod velit et, dapibus justo. Cras suscipit porttitor lorem, ac blandit tellus volutpat sed. Sed ac blandit nunc, eu maximus quam. Donec accumsan nibh in lectus gravida sagittis. Phasellus eget quam interdum, vehicula lectus id, facilisis lacus. Morbi vitae nisl sed elit pulvinar lobortis id at nulla. Integer eu tempus nisl. Cras condimentum dui eros, et volutpat nibh blandit sit amet. Fusce aliquet efficitur scelerisque. In mollis pulvinar ligula quis egestas. Proin massa est, finibus eu interdum vel, mollis quis neque. Curabitur nec leo diam. Suspendisse vitae porttitor nulla.
-										</p>
 									</center>
+									<p>
+										A Fresno native with a passion for technology, Zachary Scott transferred into CSU Fresno in 2016 from the now defuct Heald College. The journey from delivering pizzas to being a site reliabilty engineer started when he took a visual basic programming class at Heald, and was fascinated by what was possible through code. In 2011,  after landing a job at the local company Decade Software, Zack quickly began teaching myself how to code in C# and C++ through online videos and tutorials. After writing a program to automate a once manual program compilation process, he was promoted from Quality Assurance to Junior Develope. There, amongst veteran programmers, he began to become even more immersed in production software engineering. A wise Development Manager told him that to be taken seriously in the industry, he would need to obtain a B.S. of Computer Science. Taking this advice, Zack transferred his Associates Degree to Fresno State, and now 2 years later is set to graduate.
+									</p>
 								</div>
 								<!-- END Zack Section -->
 
@@ -257,10 +257,10 @@ if( $sqlConn->GetNumRows() > 0){
 										<h3>
 											David Yates
 										</h3>
+									</center>
 										<p>
 											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ipsum nulla, tincidunt a neque a, euismod suscipit ante. Nullam nec tincidunt magna, eget consequat ligula. Donec consectetur ultricies libero et auctor. Ut quis ipsum bibendum, euismod velit et, dapibus justo. Cras suscipit porttitor lorem, ac blandit tellus volutpat sed. Sed ac blandit nunc, eu maximus quam. Donec accumsan nibh in lectus gravida sagittis. Phasellus eget quam interdum, vehicula lectus id, facilisis lacus. Morbi vitae nisl sed elit pulvinar lobortis id at nulla. Integer eu tempus nisl. Cras condimentum dui eros, et volutpat nibh blandit sit amet. Fusce aliquet efficitur scelerisque. In mollis pulvinar ligula quis egestas. Proin massa est, finibus eu interdum vel, mollis quis neque. Curabitur nec leo diam. Suspendisse vitae porttitor nulla.
 										</p>
-									</center>
 								</div>
 								<!-- END David Section -->
 							</div>
