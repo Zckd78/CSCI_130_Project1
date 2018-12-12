@@ -112,7 +112,7 @@ function setGameMode(mode){
     var arcadeBtn = document.getElementById("arcadeBtn");
     var attackBtn = document.getElementById("attackBtn");
 
-    if(mode == 0 | mode == 1) {
+    if(mode == 0 || mode == 1) {
         gameMode = mode;
 
         // Update the Size Buttons
@@ -820,15 +820,15 @@ function retrieveGrid(){
             
             var responseObject = JSON.parse(httpRequest.responseText);
             
-            // Set the HTML to this response 
+            // Set the Pixel Array equal to the Grid in the response
             PixelArray = responseObject.Grid;
 
+            // Debugging
             console.log(responseObject.Grid);
 
             // Pass the args to generateTable
             generateTable();
 
-            
             // Hide the game info section
             $("#GameInfo").slideUp(250);
 
@@ -837,8 +837,7 @@ function retrieveGrid(){
             $("#GameContainer").slideDown();
             $("#PreGame_Selections").slideUp(250);
 
-            startTimer();
-            
+            startTimer();            
         }
     }
 }
